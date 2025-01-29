@@ -2,20 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.bg-light-royal-green-gradient {
+    background: linear-gradient(to bottom, #038e87, #1aa69d, #4db6ac, #80cbc4, #b2dfdb);
   }
-}
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+  .rotate-180 {
+    transform: rotate(180deg);
+    transition: transform 0.2s ease-in-out;
+  }
