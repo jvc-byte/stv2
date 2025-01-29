@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Nav from "./components/nav";
+import Footer from "./components/footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -43,6 +44,7 @@ export default function RootLayout({
           {/* Footer wrapper with full width background */}
           <div className="mx-[-1rem] sm:mx-[-1.5rem] lg:mx-[-2rem]">
             {/* Your Footer component will go here */}
+            <Footer />
           </div>
         </div>
       </body>
