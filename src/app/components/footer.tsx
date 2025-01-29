@@ -98,7 +98,10 @@ export default function Footer() {
                                     placeholder="username@site.com"
                                     className="input input-bordered input-success join-item"
                                 />
-                                <button className="btn btn-success join-item">Subscribe</button>
+                                <button className="btn btn-success join-item relative bg-green-200 overflow-hidden group">
+                                    <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-violet-600 transition-transform duration-500 transform translate-y-[100%] group-hover:translate-y-0"></span>
+                                    <span className="relative text-black group-hover:bg-transparent transition-colors duration-300">Subscribe</span>
+                                </button>
                             </div>
                         </fieldset>
                     </form>
