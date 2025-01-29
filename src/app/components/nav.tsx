@@ -87,7 +87,7 @@ export default function Nav() {
                     />
                   </button>
 
-                  <div className="absolute left-0 z-10 mt-3 w-96 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="absolute left-0 z-50 mt-3 w-96 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                     <div className="overflow-hidden rounded-xl bg-gray-50 shadow-lg ring-1 ring-gray-900/5">
                       <div className="p-4">
                         {item.items?.map((item) => (
@@ -110,7 +110,7 @@ export default function Nav() {
                           <a
                             key={item.name}
                             href={item.href}
-                            className="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100"
+                            className="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-200"
                           >
                             <item.icon aria-hidden="true" className="size-5 flex-none text-gray-400" />
                             {item.name}
