@@ -36,7 +36,9 @@ export default function DashNav() {
               />
               <p className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</p>
             </div>
-            <div className="hidden sm:ml-20 sm:block">
+
+            {/* Navigation links */}
+            <div className="hidden sm:ml-20 sm:block sm:flex">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
                   <a
@@ -52,6 +54,7 @@ export default function DashNav() {
                   </a>
                 ))}
               </div>
+              <button className="ml-4 py-2 px-6 text-sm rounded-md bg-gradient-to-br from-violet-600 to-teal-400 text-white cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-gradient-to-tr">Start a Transaction</button>
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -128,6 +131,7 @@ export default function DashNav() {
             </DisclosureButton>
           ))}
         </div>
+        <button className="ml-4 mb-4 py-2 px-6 text-sm rounded-md bg-gradient-to-br from-violet-600 to-teal-400 text-white cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-gradient-to-tr">Start a Transaction</button>
       </DisclosurePanel>
     </Disclosure>
   )
