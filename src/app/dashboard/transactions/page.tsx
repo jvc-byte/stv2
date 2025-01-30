@@ -2,6 +2,7 @@
 import CurrencyDropdown from "@/app/components/dashboard/transactions/currency-dropdown";
 import ItemCategoryDropdown from "@/app/components/dashboard/transactions/item-category";
 import RoleDropdown from "@/app/components/dashboard/transactions/role-dropdown";
+import ShippingMethodDropdown from "@/app/components/dashboard/transactions/shipping-method-dropdown";
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from "@heroicons/react/16/solid";
 
 
@@ -116,7 +117,7 @@ export default function Dash() {
                         <label htmlFor="shipping-method" className="block text-sm/6 font-medium text-gray-900">
                             Shipping Method
                         </label>
-                       < ItemCategoryDropdown />
+                       < ShippingMethodDropdown />
                     </div>
                     <div className="col-span-3">
                         <label htmlFor="shipping-fee" className="block text-sm/6 font-medium text-gray-900">
