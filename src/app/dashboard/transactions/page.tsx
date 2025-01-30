@@ -1,20 +1,21 @@
 'use client'
 import CurrencyDropdown from "@/app/components/dashboard/transactions/currency-dropdown";
+import ItemCategoryDropdown from "@/app/components/dashboard/transactions/item-category";
 import RoleDropdown from "@/app/components/dashboard/transactions/role-dropdown";
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from "@heroicons/react/16/solid";
 
 
 export default function Dash() {
     return (
-        <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8">
+        <form className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md">
 
-            <h1 className="text-3xl font-bold text-gray-900 my-10 border-b-4 pb-4">Start Transactions</h1>
+            <h1 className=" text-center sm:text-justify text-3xl font-bold text-gray-900 my-10 border-b-4 pb-4">Start Transactions</h1>
 
 
             <div className="border-b border-gray-900/10 pb-12">
 
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div className="sm:col-span-6">
+                <div className="mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="col-span-3 sm:col-span-6">
                         <label htmlFor="transactionTitle" className="block text-sm/6 font-medium text-gray-900">
                             Transaction Title
                         </label>
@@ -29,21 +30,21 @@ export default function Dash() {
                         </div>
                     </div>
 
-                    <div className="sm:col-span-2">
+                    <div className="col-span-3 sm:col-span-2">
                         <label htmlFor="role" className="block text-sm/6 font-medium text-gray-900">
                             My Role
                         </label>
                         <RoleDropdown />
                     </div>
 
-                    <div className="sm:col-span-2">
+                    <div className="col-span-3 sm:col-span-2">
                         <label htmlFor="country" className="block text-sm/6 font-medium text-gray-900">
                             Currency
                         </label>
                         <CurrencyDropdown />
                     </div>
 
-                    <div className="sm:col-span-2">
+                    <div className="col-span-3 sm:col-span-2">
                         <label htmlFor="country" className="block text-sm/6 font-medium text-gray-900">
                             Inspection period (days)
                         </label>
@@ -56,7 +57,7 @@ export default function Dash() {
                         </div>
                     </div>
 
-                    <h2 className="col-span-full text-xl font-semibold text-gray-900 border-b-2 pb-4">Transactions Details</h2>
+                    <h2 className="col-span-3 sm:col-span-full text-xl font-semibold text-gray-900 border-b-2 pb-4">Transactions Details</h2>
 
 
                     <div className="col-span-3">
@@ -90,37 +91,41 @@ export default function Dash() {
                         </div>
                     </div>
 
-                    <div className="sm:col-span-6 sm:col-start-1">
+                    <div className="col-span-3 sm:col-start-1">
                         <label htmlFor="item-category" className="block text-sm/6 font-medium text-gray-900">
                             Item Category
                         </label>
-                        <div className="">
-                            <input
-                                id="item-category"
-                                name="item-category"
-                                type="text"
-                                autoComplete="address-level2"
-                                className=" border-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
-                            />
-                        </div>
+                       < ItemCategoryDropdown />
                     </div>
 
-                    <div className="sm:col-span-6">
-                        <label htmlFor="region" className="block text-sm/6 font-medium text-gray-900">
-                            State / Province
+                    <div className="col-span-3">
+                        <label htmlFor="item-description" className="block text-sm/6 font-medium text-gray-900">
+                            Item Description
                         </label>
                         <div className="">
                             <input
-                                id="region"
-                                name="region"
+                                id="item-description"
+                                name="item-description"
                                 type="text"
                                 autoComplete="address-level1"
                                 className=" border-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
                             />
                         </div>
                     </div>
+                    <div className="col-span-3 sm:col-start-1">
+                        <label htmlFor="shipping-method" className="block text-sm/6 font-medium text-gray-900">
+                            Shipping Method
+                        </label>
+                       < ItemCategoryDropdown />
+                    </div>
+                    <div className="col-span-3">
+                        <label htmlFor="shipping-fee" className="block text-sm/6 font-medium text-gray-900">
+                            Shipping fee paid by
+                        </label>
+                       < RoleDropdown />
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     );
 }
