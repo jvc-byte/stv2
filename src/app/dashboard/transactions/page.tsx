@@ -96,7 +96,7 @@ export default function Dash() {
                         <label htmlFor="item-category" className="block text-sm/6 font-medium text-gray-900">
                             Item Category
                         </label>
-                       < ItemCategoryDropdown />
+                        < ItemCategoryDropdown />
                     </div>
 
                     <div className="col-span-3">
@@ -117,14 +117,18 @@ export default function Dash() {
                         <label htmlFor="shipping-method" className="block text-sm/6 font-medium text-gray-900">
                             Shipping Method
                         </label>
-                       < ShippingMethodDropdown />
+                        < ShippingMethodDropdown />
                     </div>
                     <div className="col-span-3">
                         <label htmlFor="shipping-fee" className="block text-sm/6 font-medium text-gray-900">
                             Shipping fee paid by
                         </label>
-                       < RoleDropdown />
+                        < RoleDropdown />
                     </div>
+                    <div className="col-span-3 sm:col-span-full flex justify-end">
+                        <button className="btn hover:btn-success btn-wide hover:text-white text-white bg-green-500 text-base font-medium">Update Item</button>
+                    </div>
+
                 </div>
             </div>
         </form>
