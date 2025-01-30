@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Nav from "./components/nav";
-import Footer from "./components/footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,26 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="lemonade">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-gray-50`}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Navigation wrapper with full width background */}
-          <div className="mx-[-1rem] sm:mx-[-1.5rem] lg:mx-[-2rem]">
-            {/* Your Nav component will go here */}
-            <Nav />
-          </div>
-          
-          {/* Main content container */}
-          <main className="py-6">
-            {children}
-          </main>
-
-          {/* Footer wrapper with full width background */}
-          <div className="mx-[-1rem] sm:mx-[-1.5rem] lg:mx-[-2rem]">
-            {/* Your Footer component will go here */}
-            <Footer />
-          </div>
-        </div>
+    <html lang="en" data-theme="light">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {children}
       </body>
     </html>
   );
