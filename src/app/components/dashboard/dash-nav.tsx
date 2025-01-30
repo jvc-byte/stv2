@@ -34,7 +34,7 @@ export default function DashNav() {
                 src="window.svg"
                 className="h-8 w-auto"
               />
-              <p className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</p>
+              <a href='/dashboard' className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</a>
             </div>
 
             {/* Navigation links */}
@@ -54,7 +54,7 @@ export default function DashNav() {
                   </a>
                 ))}
               </div>
-              <button className="hidden lg:block ml-4 py-2 px-6 text-sm rounded-md bg-gradient-to-br from-violet-600 to-teal-400 text-white cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-gradient-to-tr">Start a Transaction</button>
+              <a href='/dashboard/transactions' className="hidden lg:block ml-4 py-2 px-6 text-sm rounded-md bg-gradient-to-br from-violet-600 to-teal-400 text-white cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-gradient-to-tr">Start a Transaction</a>
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -86,7 +86,7 @@ export default function DashNav() {
               >
                 <MenuItem>
                   <a
-                    href="#"
+                    href="/user-profile"
                     className="block hover:bg-teal-600 hover:text-white px-4 py-2 text-sm text-green-700 data-focus:bg-green-100 data-focus:outline-hidden"
                   >
                     Your Profile
