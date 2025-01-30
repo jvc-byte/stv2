@@ -133,7 +133,7 @@ export default function Footer() {
                     <a className="link link-hover">Press</a>
                     <a className="link link-hover">Contact us</a>
                 </nav>
-                <nav>
+                <nav className="flex flex-col gap-2">
                     <h6 className="footer-title">Partners</h6>
                     <a className="link link-hover">Benefits</a>
                     <a className="link link-hover">Get Started</a>
@@ -141,15 +141,14 @@ export default function Footer() {
                     <a className="link link-hover">Partner Enquiry</a>
                     <a className="link link-hover">API Guide</a>
                 </nav>
-                <nav>
-                    <h6 className="footer-title">Legal</h6>
-                    <a className="link link-hover">Terms of use</a>
-                    <a className="link link-hover">Privacy policy</a>
-                    <a className="link link-hover">Cookie policy</a>
-                </nav>
             </div>
             <div className="mt-6 text-center">
-                <span className="text-gray-600 font-bold">© 2025 SealeTrust, Inc. All rights reserved.</span>
+                <nav className="flex items-center justify-center gap-2 my-2">
+                    <a className="link link-hover">Terms of use</a>
+                    |<a className="link link-hover">Privacy policy</a>
+                    |<a className="link link-hover">Cookie policy</a>
+                </nav>
+                <p className="text-gray-600 font-bold">© 2025 SealeTrust, Inc. All rights reserved.</p>
             </div>
         </footer>
     );
