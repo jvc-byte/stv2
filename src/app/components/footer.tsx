@@ -8,7 +8,7 @@ export default function Footer() {
                             <span className="sr-only">Sealed Trust</span>
                             <img
                                 alt="SealedTrust Logo"
-                                src="window.svg"
+                                src="/window.svg"
                                 width={32}
                                 height={32}
                                 className="h-8 w-auto"

@@ -31,7 +31,7 @@ export default function DashNav() {
             <div className="flex shrink-0 items-center">
               <img
                 alt="SealedTrust"
-                src="window.svg"
+                src="/window.svg"
                 className="h-8 w-auto"
               />
               <a href='/dashboard' className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</a>
