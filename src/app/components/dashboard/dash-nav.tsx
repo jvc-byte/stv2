@@ -1,5 +1,7 @@
+'use client';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import SignInButton from '../sign-in-button'
 
 const navigation = [
   { name: 'My Transactions', href: '#', current: true },
@@ -31,7 +33,7 @@ export default function DashNav() {
             <div className="flex shrink-0 items-center">
               <img
                 alt="SealedTrust"
-                src="window.svg"
+                src="https://sealed-trust.vercel.app/favicon.ico"
                 className="h-8 w-auto"
               />
               <a href='/dashboard' className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</a>
@@ -85,6 +87,13 @@ export default function DashNav() {
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
                 <MenuItem>
+                  <div
+                    className="block px-4 py-2"
+                  >
+                    <SignInButton />
+                  </div>
+                </MenuItem>
+                <MenuItem>
                   <a
                     href="/user-profile"
                     className="block hover:bg-teal-600 hover:text-white px-4 py-2 text-sm text-green-700 data-focus:bg-green-100 data-focus:outline-hidden"
@@ -98,14 +107,6 @@ export default function DashNav() {
                     className="block hover:bg-teal-600 hover:text-white px-4 py-2 text-sm text-green-700 data-focus:bg-green-100 data-focus:outline-hidden"
                   >
                     Settings
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block hover:bg-teal-600 hover:text-white px-4 py-2 text-sm text-green-700 data-focus:bg-green-100 data-focus:outline-hidden"
-                  >
-                    Sign out
                   </a>
                 </MenuItem>
               </MenuItems>

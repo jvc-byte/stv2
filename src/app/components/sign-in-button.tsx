@@ -1,3 +1,4 @@
+'use client';
 import { ConnectButton, lightTheme } from "thirdweb/react";
 import { client } from "@/client";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
@@ -44,6 +45,7 @@ export default function SignInButton() {
                 termsOfServiceUrl: "https:// sealedtrust.com",
                 privacyPolicyUrl: "https:// sealedtrust.com",
             }}
+            
         />
     );
 };
