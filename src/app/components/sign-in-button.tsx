@@ -7,7 +7,7 @@ export default function SignInButton() {
     const wallets = [
         inAppWallet({
           auth: {
-            options: ["google", "discord", "telegram", "farcaster", "email", "x", "passkey", "phone", "facebook", "github", "twitch", "steam", "apple",],
+            options: ["google", "discord", "telegram", "farcaster", "email", "x", "passkey", "phone", "facebook", "github", "twitch", "apple",],
           },
         }),
         createWallet("io.metamask"),
@@ -21,6 +21,11 @@ export default function SignInButton() {
         <ConnectButton
             client={client}
             wallets={wallets}
+            detailsButton={{
+                style: {
+                    background: "white",
+                }
+            }}
             theme={lightTheme({
                 colors: {
                     modalBg: "hsl(0, 0%, 100%)",

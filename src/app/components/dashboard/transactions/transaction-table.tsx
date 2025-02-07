@@ -4,7 +4,11 @@ const tableContent = [
     { id: 16885373, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'paid', action: 'Details' },
     { id: 29698788, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Seller', status: 'pending', action: 'Details' },
     { id: 36576563, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'cancelled', action: 'Details' },
-    { id: 46862533, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'reversed', action: 'Details' },
+    { id: 46862533, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'refunded', action: 'Details' },
+    { id: 46334531, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'created', action: 'Details' },
+    { id: 46834957, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'funded', action: 'Details' },
+    { id: 46856234, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'in dispute', action: 'Details' },
+    { id: 46856545, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'expired', action: 'Details' },
 ];
 
 export default function TransactionTable() {

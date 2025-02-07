@@ -10,14 +10,16 @@ export default function TransactionStatus({ status }: { status: string }) {
                     'bg-gray-300 text-gray-800': status === 'pending',
                     'bg-green-500 text-white': status === 'paid',
                     'bg-orange-500 text-white': status === 'cancelled',
-                    'bg-red-500 text-white': status === 'reversed',
+                    'bg-yellow-500 text-white': status === 'refunded',
+                    'bg-red-500 text-white': status === 'in dispute',
                 },
             )}
         >
             {status === 'pending' ? (<> Pending <ClockIcon className="ml-1 w-4 text-gray-800" /></>) : null}
             {status === 'paid' ? (<> Paid <CheckCircleIcon className="ml-1 w-4 text-white" /> </>) : null}
             {status === 'cancelled' ? (<> Cancelled <XCircleIcon className="ml-1 w-4 text-white" /> </>) : null}
-            {status === 'reversed' ? (<> Reversed <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
+            {status === 'refunded' ? (<> Refunded <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
+            {status === 'in dispute' ? (<> In Dispute <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
         </span>
     );
 }
