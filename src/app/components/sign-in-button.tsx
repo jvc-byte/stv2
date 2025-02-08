@@ -9,6 +9,7 @@ export default function SignInButton() {
           auth: {
             options: ["google", "discord", "telegram", "farcaster", "email", "x", "passkey", "phone", "facebook", "github", "twitch", "apple",],
           },
+          hidePrivateKeyExport: true,
         }),
         createWallet("io.metamask"),
         createWallet("com.coinbase.wallet"),

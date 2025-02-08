@@ -8,8 +8,8 @@ export default function Header() {
         <div className="bg-gray flex flex-col sm:flex-row mt-6">
             <div className="w-full sm:w-1/2 mx-2">
                 <div className="mx-auto max-w-2xl">
-                    <h1 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-[58px] leading-none text-transparent bg-clip-text bg-gradient-to-r to-violet-600 from-teal-400">
-                        No 1. Decentralized Buy and Sell Platform
+                    <h1 className="text-4xl font-semibold tracking-tight text-center text-gray-900 sm:text-[58px] leading-none text-transparent bg-clip-text bg-gradient-to-r to-violet-600 from-teal-400">
+                        Never buy or sell anything online without SealedTrust.
                     </h1>
                     <p className="mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
                         With SealedTrust you can buy and sell anything safely without the risk of loss. Truly Decentralized payments.
@@ -46,8 +46,10 @@ export default function Header() {
                                     {/* Fourth Dropdown */}
                                     <div className="relative">
                                         <select className="h-full appearance-none border border-l-0 border-gray-300 rounded-r-md px-8 py-2 focus:outline-none bg-white">
-                                            <option value="domain">USDC</option>
-                                            <option value="contracted">USDT</option>
+                                            <option value="udc">USDC</option>
+                                            <option value="usdt">USDT</option>
+                                            <option value="eth">ETH</option>
+                                            <option value="ngn">NGN</option>
                                         </select>
                                         <ChevronDownIcon
                                             className="absolute right-2 top-1/2 -translate-y-1/2 size-5 text-gray-900 pointer-events-none"
