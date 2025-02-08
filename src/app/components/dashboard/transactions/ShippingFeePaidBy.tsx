@@ -1,18 +1,18 @@
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import { useState, useEffect, useRef } from 'react';
 
-const CurrencyDropdown = () => {
+const ShippingFeePaidBy = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState('');
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   
-  const currency = [
-    'USDT',
-    'USDC',
-    'ETH'
+  const roles = [
+    'Buyer',
+    'Seller',
+    'Broker'
   ];
 
-  const filteredCurrency = currency.filter(opt => 
+  const filteredRoles = roles.filter(opt => 
     opt.toLowerCase().includes(value.toLowerCase())
   );
 
@@ -32,9 +32,11 @@ const CurrencyDropdown = () => {
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <input
+        id="shipFeePaidBy"
+        name="shipFeePaidBy"
         type="text"
         className="border-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
-        placeholder="Select Currency..."
+        placeholder="Select Role..."
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onFocus={() => setIsOpen(true)}
@@ -46,7 +48,7 @@ const CurrencyDropdown = () => {
       
       {isOpen && (
         <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
-          {filteredCurrency.map((option, index) => (
+          {filteredRoles.map((option, index) => (
             <div
               key={index}
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -64,4 +66,4 @@ const CurrencyDropdown = () => {
   );
 };
 
-export default CurrencyDropdown;
+export default ShippingFeePaidBy;

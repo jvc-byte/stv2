@@ -1,25 +1,18 @@
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import { useState, useEffect, useRef } from 'react';
 
-const ShippingMethodDropdown = () => {
+const RoleDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState('');
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   
-  const shippings = [
-    'Cargo Shipping',
-    'Air Shipping',
-    'Standard Shipping',
-    'Sea Shipping',
-    'Road Shipping',
-    'International Shipping',
-    'Local Shipping',
-    'Express Shipping',
-    'Same Day Shipping',
-    'No Shipping',
+  const roles = [
+    'Buyer',
+    'Seller',
+    'Broker'
   ];
 
-  const filteredShippings = shippings.filter(opt => 
+  const filteredRoles = roles.filter(opt => 
     opt.toLowerCase().includes(value.toLowerCase())
   );
 
@@ -39,9 +32,11 @@ const ShippingMethodDropdown = () => {
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <input
+        id="role"
+        name="role"
         type="text"
         className="border-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
-        placeholder="Select Shipping Method..."
+        placeholder="Select Role..."
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onFocus={() => setIsOpen(true)}
@@ -52,8 +47,8 @@ const ShippingMethodDropdown = () => {
       />
       
       {isOpen && (
-        <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-60 overflow-y-auto">
-          {filteredShippings.map((option, index) => (
+        <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
+          {filteredRoles.map((option, index) => (
             <div
               key={index}
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -71,4 +66,4 @@ const ShippingMethodDropdown = () => {
   );
 };
 
-export default ShippingMethodDropdown;
+export default RoleDropdown;

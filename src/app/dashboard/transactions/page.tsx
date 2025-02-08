@@ -1,8 +1,9 @@
 'use client'
-import CurrencyDropdown from "@/app/components/dashboard/transactions/currency-dropdown";
-import ItemCategoryDropdown from "@/app/components/dashboard/transactions/item-category";
-import RoleDropdown from "@/app/components/dashboard/transactions/role-dropdown";
-import ShippingMethodDropdown from "@/app/components/dashboard/transactions/shipping-method-dropdown";
+import CurrencyDropdown from "@/app/components/dashboard/transactions/CurrencyDropdown";
+import ItemCategoryDropdown from "@/app/components/dashboard/transactions/ItemCategory";
+import RoleDropdown from "@/app/components/dashboard/transactions/RoleDropdown";
+import ShippingFeePaidBy from "@/app/components/dashboard/transactions/ShippingFeePaidBy";
+import ShippingMethodDropdown from "@/app/components/dashboard/transactions/ShippingMethodDropdown";
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from "@heroicons/react/16/solid";
 
 
@@ -25,7 +26,7 @@ export default function Dash() {
                                 id="transactionTitle"
                                 name="transactionTitle"
                                 type="text"
-                                autoComplete="transaction-title"
+                                autoComplete="Transaction Title"
                                 className="border-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
                             />
                         </div>
@@ -39,18 +40,20 @@ export default function Dash() {
                     </div>
 
                     <div className="col-span-3 sm:col-span-2">
-                        <label htmlFor="country" className="block text-sm/6 font-medium text-gray-900">
+                        <label htmlFor="currency" className="block text-sm/6 font-medium text-gray-900">
                             Currency
                         </label>
                         <CurrencyDropdown />
                     </div>
 
                     <div className="col-span-3 sm:col-span-2">
-                        <label htmlFor="country" className="block text-sm/6 font-medium text-gray-900">
+                        <label htmlFor="inspectPeriod" className="block text-sm/6 font-medium text-gray-900">
                             Inspection period (days)
                         </label>
                         <div className="relative w-full">
                             <input
+                                id="inspectPeriod"
+                                name="inspectPeriod"
                                 type="number"
                                 className="border-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
                                 placeholder="Enter Number of Days..."
@@ -62,15 +65,15 @@ export default function Dash() {
 
 
                     <div className="col-span-3">
-                        <label htmlFor="item-name" className="block text-sm/6 font-medium text-gray-900">
+                        <label htmlFor="itemName" className="block text-sm/6 font-medium text-gray-900">
                             Item Name
                         </label>
                         <div className="">
                             <input
-                                id="item-name"
-                                name="item-name"
+                                id="itemName"
+                                name="itemName"
                                 type="text"
-                                autoComplete="item-name"
+                                autoComplete="Item Name"
                                 placeholder="Enter Item Name..."
                                 className="border-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
                             />
@@ -93,37 +96,37 @@ export default function Dash() {
                     </div>
 
                     <div className="col-span-3 sm:col-start-1">
-                        <label htmlFor="item-category" className="block text-sm/6 font-medium text-gray-900">
+                        <label htmlFor="itemCategory" className="block text-sm/6 font-medium text-gray-900">
                             Item Category
                         </label>
                         < ItemCategoryDropdown />
                     </div>
 
                     <div className="col-span-3">
-                        <label htmlFor="item-description" className="block text-sm/6 font-medium text-gray-900">
+                        <label htmlFor="itemDescription" className="block text-sm/6 font-medium text-gray-900">
                             Item Description
                         </label>
                         <div className="">
                             <input
-                                id="item-description"
-                                name="item-description"
+                                id="itemDescription"
+                                name="itemDescription"
                                 type="text"
-                                autoComplete="address-level1"
+                                autoComplete="itemDescription"
                                 className=" border-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-600 sm:text-sm/6"
                             />
                         </div>
                     </div>
                     <div className="col-span-3 sm:col-start-1">
-                        <label htmlFor="shipping-method" className="block text-sm/6 font-medium text-gray-900">
+                        <label htmlFor="shippingMethod" className="block text-sm/6 font-medium text-gray-900">
                             Shipping Method
                         </label>
                         < ShippingMethodDropdown />
                     </div>
                     <div className="col-span-3">
-                        <label htmlFor="shipping-fee" className="block text-sm/6 font-medium text-gray-900">
+                        <label htmlFor="shipFeePaidBy" className="block text-sm/6 font-medium text-gray-900">
                             Shipping fee paid by
                         </label>
-                        < RoleDropdown />
+                        < ShippingFeePaidBy />
                     </div>
                     <div className="col-span-3 sm:col-span-full flex justify-end">
                         <button className="btn hover:btn-success btn-wide hover:text-white text-white bg-green-500 text-base font-medium">Update Item</button>

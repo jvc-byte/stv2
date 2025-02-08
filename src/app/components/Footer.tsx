@@ -84,13 +84,15 @@ export default function Footer() {
                     <form className="w-full max-w-md">
                         <h6 className="footer-title">Newsletter</h6>
                         <fieldset className="form-control w-full">
-                            <label className="label">
+                            <label htmlFor="newsLetter" className="label">
                                 <span className="label-text text-sm sm:text-base">
                                     Enter your email address to receive update first
                                 </span>
                             </label>
                             <div className="join flex-col sm:flex-row w-full gap-2 sm:gap-0">
                                 <input
+                                    id="newsLetter"
+                                    name="newsLetter"
                                     type="text"
                                     placeholder="username@site.com"
                                     className="input input-bordered input-success sm:join-item w-full sm:w-auto flex-grow"

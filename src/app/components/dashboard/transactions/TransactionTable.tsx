@@ -1,4 +1,4 @@
-import TransactionStatus from "./transaction-status";
+import TransactionStatus from "./TransactionStatus";
 
 const tableContent = [
     { id: 16885373, title: 'Buy Car', created: 'Oct 26, 2024', amount: 200000, role: 'Buyer', status: 'paid', action: 'Details' },

@@ -1,5 +1,5 @@
 import { PhoneIcon, PlayCircleIcon } from "@heroicons/react/16/solid";
-import TransactionTable from "../components/dashboard/transactions/transaction-table";
+import TransactionTable from "../components/dashboard/transactions/TransactionTable";
 import { isLoggedIn } from "../api/auth/auth";
 import { redirect } from "next/navigation";
 

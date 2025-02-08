@@ -5,7 +5,7 @@ const StyledDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState('');
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  
+
   const options = [
     'Domain',
     'Contracted Service',
@@ -15,7 +15,7 @@ const StyledDropdown = () => {
     'Electronics'
   ];
 
-  const filteredOptions = options.filter(opt => 
+  const filteredOptions = options.filter(opt =>
     opt.toLowerCase().includes(value.toLowerCase())
   );
 
@@ -35,6 +35,8 @@ const StyledDropdown = () => {
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <input
+        id='item'
+        name='item'
         type="text"
         className="w-full border border-gray-300 border-l-0 rounded-r-md px-4 py-2 pr-10 focus:outline-none"
         placeholder="Search or select..."
@@ -46,7 +48,7 @@ const StyledDropdown = () => {
         className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-gray-900 pointer-events-none"
         aria-hidden="true"
       />
-      
+
       {isOpen && (
         <div className="absolute w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
           {filteredOptions.map((option, index) => (

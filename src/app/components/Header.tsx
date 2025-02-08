@@ -20,7 +20,7 @@ export default function Header() {
                         <div className="flex w-full">
                             {/* First Dropdown */}
                             <div className="relative w-full flex">
-                                <select className="w-full appearance-none border border-gray-300 rounded-l-md px-4 py-2 pr-10 focus:outline-none">
+                                <select id="role" name="role" className="w-full appearance-none border border-gray-300 rounded-l-md px-4 py-2 pr-10 focus:outline-none">
                                     <option value="Brokering">I'm Brokering</option>
                                     <option value="Buying">I'm Buying</option>
                                     <option value="Selling">I'm Selling</option>
@@ -39,13 +39,15 @@ export default function Header() {
                                 <div className="flex">
                                     {/* Third Dropdown */}
                                     <input
+                                        id="amount"
+                                        name="amount"
                                         type="number"
                                         className="w-full border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none"
                                         placeholder="For How many"
                                     />
                                     {/* Fourth Dropdown */}
                                     <div className="relative">
-                                        <select className="h-full appearance-none border border-l-0 border-gray-300 rounded-r-md px-8 py-2 focus:outline-none bg-white">
+                                        <select id="currency" name="currency" className="h-full appearance-none border border-l-0 border-gray-300 rounded-r-md px-8 py-2 focus:outline-none bg-white">
                                             <option value="udc">USDC</option>
                                             <option value="usdt">USDT</option>
                                             <option value="eth">ETH</option>
@@ -71,7 +73,7 @@ export default function Header() {
                     <figure>
                         <img
                             src="https://d1zm2628k0l6s5.cloudfront.net/wp-content/uploads/2023/03/escrow_with_eqi_.png"
-                            alt="Shoes" />
+                            alt="How Escrow Works" />
                     </figure>
                 </div>
             </div>
