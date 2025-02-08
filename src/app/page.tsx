@@ -1,8 +1,8 @@
 import Image from "next/image";
-import LogoCloud from "./components/logo-cloud";
-import Header from "./components/header";
-import Nav from "./components/nav";
-import Footer from "./components/footer";
+import LogoCloud from "./components/LogoCloud";
+import Header from "./components/Header";
+import Nav from "./components/Nav";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (

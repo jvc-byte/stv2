@@ -1,7 +1,7 @@
 // import "@/app/globals.css";
 
-import DashNav from "../components/dashboard/dash-nav";
-import Footer from "../components/footer";
+import DashNav from "../components/dashboard/DashNav";
+import Footer from "../components/Footer";
 
 export default function DashLayout({
     children,

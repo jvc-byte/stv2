@@ -1,6 +1,6 @@
 'use client'
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
-import StyledDropdown from "./styled-dropdown";
+import StyledDropdown from "./StyledDropdown";
 
 
 export default function Header() {
