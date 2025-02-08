@@ -1,5 +1,7 @@
 import { PhoneIcon, PlayCircleIcon } from "@heroicons/react/16/solid";
 import TransactionTable from "../components/dashboard/transactions/transaction-table";
+import { isLoggedIn } from "../api/auth/auth";
+import { redirect } from "next/navigation";
 
 const navLinks = [
     { name: 'All', href: '#' },
@@ -9,7 +11,11 @@ const navLinks = [
 ]
 
 
-export default function Dash() {
+const Dash = async () => {
+    if (!(await isLoggedIn())) {
+        redirect("/")
+    }
+    
     return (
         <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-6xl my-6 px-4 sm:px-6 lg:px-8">
             <div className="">
@@ -73,4 +79,6 @@ export default function Dash() {
             </div>
         </div>
     );
-}
+};
+
+export default Dash;

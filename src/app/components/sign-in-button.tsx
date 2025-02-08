@@ -2,30 +2,37 @@
 import { ConnectButton, lightTheme } from "thirdweb/react";
 import { client } from "@/lib/client";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
+import { NextPage } from "next";
+import { defineChain } from "thirdweb";
+import { generatePayload, isLoggedIn, login, logout } from "../api/auth/auth";
+import { useRouter } from "next/navigation";
 
-export default function SignInButton() {
+const SignInButton: NextPage = () => {
+    const router = useRouter();
+
     const wallets = [
         inAppWallet({
-          auth: {
-            options: ["google", "discord", "telegram", "farcaster", "email", "x", "passkey", "phone", "facebook", "github", "twitch", "apple",],
-          },
-          hidePrivateKeyExport: true,
+            auth: {
+                options: ["google", "discord", "telegram", "farcaster", "email", "x", "passkey", "phone", "facebook", "github", "twitch", "apple",],
+            },
+            hidePrivateKeyExport: true,
         }),
         createWallet("io.metamask"),
         createWallet("com.coinbase.wallet"),
         createWallet("me.rainbow"),
         createWallet("io.rabby"),
         createWallet("io.zerion.wallet"),
-      ];
+    ];
+
+    const chainID = 8453;
 
     return (
         <ConnectButton
             client={client}
             wallets={wallets}
-            detailsButton={{
-                style: {
-                    background: "white",
-                }
+            accountAbstraction={{
+                chain: defineChain(chainID),
+                sponsorGas: true,
             }}
             theme={lightTheme({
                 colors: {
@@ -51,7 +58,33 @@ export default function SignInButton() {
                 termsOfServiceUrl: "https:// sealedtrust.com",
                 privacyPolicyUrl: "https:// sealedtrust.com",
             }}
-            
+
+            auth={{
+                isLoggedIn: async (address) => {
+                    console.log("checking if logged in!", { address });
+                    return await isLoggedIn();
+                },
+
+                doLogin: async (params) => {
+                    console.log("logging in!");
+                    const result = await login(params);
+                    if (result.success && result.redirectUrl){
+                        router.push(result.redirectUrl);
+                    }
+                },
+
+                getLoginPayload: async ({ address }) => generatePayload({
+                    address, chainId: chainID
+                }),
+
+                doLogout: async () => {
+                    console.log("logging out!");
+                    await logout();
+                },
+            }}
+
         />
     );
 };
+
+export default SignInButton;
