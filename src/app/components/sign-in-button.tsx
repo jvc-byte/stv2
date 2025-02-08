@@ -1,6 +1,6 @@
 'use client';
 import { ConnectButton, lightTheme } from "thirdweb/react";
-import { client } from "@/client";
+import { client } from "@/lib/client";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 
 export default function SignInButton() {
