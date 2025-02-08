@@ -61,7 +61,7 @@ export default function Header() {
                         </div>
                     </div>
                 </div>
-                <button className="relative bg-green-200 overflow-hidden group btn w-full mt-2">
+                <button className="relative bg-teal-200 overflow-hidden group btn w-full mt-2">
                     <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-violet-600 transition-transform duration-500 transform translate-x-[-100%] group-hover:translate-x-0"></span>
                     <span className="relative text-black group-hover:bg-transparent transition-colors duration-300">Get Started Now</span>
                 </button>

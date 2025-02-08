@@ -3,7 +3,7 @@
 import { Bars3Icon, XMarkIcon, ChevronDownIcon, ChevronUpIcon, ChartPieIcon, PhoneIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
 import { Dialog } from "@headlessui/react";
 import { useState } from "react";
-import SignInButton from "./sign-in-button";
+import SignInButton from "./SignInButton";
 
 interface NavigationItem {
   name: string;

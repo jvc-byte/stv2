@@ -1,7 +1,7 @@
 'use client';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import SignInButton from '../sign-in-button'
+import SignInButton from '../SignInButton'
 
 const navigation = [
   { name: 'My Transactions', href: '#', current: true },
@@ -31,12 +31,14 @@ export default function DashNav() {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
-              <img
-                alt="SealedTrust"
-                src="https://sealed-trust.vercel.app/favicon.ico"
-                className="h-8 w-auto"
-              />
-              <a href='/dashboard' className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</a>
+              <a href='/dashboard'>
+                <img
+                  alt="SealedTrust"
+                  src="https://sealed-trust.vercel.app/favicon.ico"
+                  className="h-8 w-auto"
+                />
+                <p className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</p>
+              </a>
             </div>
 
             {/* Navigation links */}
@@ -131,8 +133,20 @@ export default function DashNav() {
               {item.name}
             </DisclosureButton>
           ))}
+
+          <a
+            href="/dashboard/transactions"
+            className={classNames(
+              'block rounded-md px-3 py-2 text-base text-center font-medium', // Match navigation item styling
+              'text-white hover:bg-green-700', // Match hover and text color
+              'bg-gradient-to-br from-violet-600 to-teal-400', // Add gradient background
+            )}
+          >
+            Start a Transaction
+          </a>
         </div>
-        <button className="ml-4 mb-4 py-2 px-6 text-sm rounded-md bg-gradient-to-br from-violet-600 to-teal-400 text-white cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-gradient-to-tr">Start a Transaction</button>
+
+
       </DisclosurePanel>
     </Disclosure>
   )
