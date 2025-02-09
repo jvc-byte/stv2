@@ -2,6 +2,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import SignInButton from '../SignInButton'
+import Link from 'next/link';
 
 const navigation = [
   { name: 'My Transactions', href: '#', current: true },
@@ -31,21 +32,21 @@ export default function DashNav() {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
-              <a href='/dashboard'>
+              <Link href='/dashboard'>
                 <img
                   alt="SealedTrust"
                   src="https://sealed-trust.vercel.app/favicon.ico"
                   className="h-8 w-auto"
                 />
                 <p className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</p>
-              </a>
+              </Link>
             </div>
 
             {/* Navigation links */}
             <div className="hidden sm:ml-20 sm:block sm:flex">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.href}
                     aria-current={item.current ? 'page' : undefined}
@@ -55,10 +56,10 @@ export default function DashNav() {
                     )}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
-              <a href='/dashboard/transactions' className="hidden lg:block ml-4 py-2 px-6 text-sm rounded-md bg-gradient-to-br from-violet-600 to-teal-400 text-white cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-gradient-to-tr">Start a Transaction</a>
+              <Link href={'/dashboard/transactions'} className="hidden lg:block ml-4 py-2 px-6 text-sm rounded-md bg-gradient-to-br from-violet-600 to-teal-400 text-white cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-gradient-to-tr">Start a Transaction</Link>
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -96,20 +97,20 @@ export default function DashNav() {
                   </div>
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="/user-profile"
+                  <Link
+                    href={"/user-profile"}
                     className="block hover:bg-teal-600 hover:text-white px-4 py-2 text-sm text-green-700 data-focus:bg-green-100 data-focus:outline-hidden"
                   >
                     Your Profile
-                  </a>
+                  </Link>
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="#"
+                  <Link
+                    href={"#"}
                     className="block hover:bg-teal-600 hover:text-white px-4 py-2 text-sm text-green-700 data-focus:bg-green-100 data-focus:outline-hidden"
                   >
                     Settings
-                  </a>
+                  </Link>
                 </MenuItem>
               </MenuItems>
             </Menu>
@@ -134,7 +135,7 @@ export default function DashNav() {
             </DisclosureButton>
           ))}
 
-          <a
+          <Link
             href="/dashboard/transactions"
             className={classNames(
               'block rounded-md px-3 py-2 text-base text-center font-medium', // Match navigation item styling
@@ -143,7 +144,7 @@ export default function DashNav() {
             )}
           >
             Start a Transaction
-          </a>
+          </Link>
         </div>
 
 

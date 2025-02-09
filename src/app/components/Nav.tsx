@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon, ChevronDownIcon, ChevronUpIcon, ChartPieIcon, Pho
 import { Dialog } from "@headlessui/react";
 import { useState } from "react";
 import SignInButton from "./SignInButton";
+import Link from "next/link";
 
 interface NavigationItem {
   name: string;
@@ -63,7 +64,7 @@ export default function Nav() {
           className="flex items-center justify-between p-6 lg:px-8 my-2"
         >
           <div className="flex items-center">
-            <a href="#" className="flex -m-1.5 p-1.5">
+            <Link href="#" className="flex -m-1.5 p-1.5">
               <span className="sr-only">Sealed Trust</span>
               <img
                 alt="SealedTrust Logo"
@@ -73,7 +74,7 @@ export default function Nav() {
                 className="h-8 w-auto"
               />
               <span className="font-bold text-xl ml-2">SealedTrust</span>
-            </a>
+            </Link>
 
             <div className="hidden lg:flex lg:ml-24">
               {navigation.map((item) => (
@@ -95,10 +96,10 @@ export default function Nav() {
                               <item.icon aria-hidden="true" className="size-6 text-gray-600 group-hover/item:text-green-600" />
                             </div>
                             <div>
-                              <a href={item.href} className="font-semibold text-gray-900">
+                              <Link href={item.href} className="font-semibold text-gray-900">
                                 {item.name}
                                 <span className="absolute inset-0" />
-                              </a>
+                              </Link>
                               <p className="mt-1 text-gray-600">{item.description}</p>
                             </div>
                           </div>
@@ -106,14 +107,14 @@ export default function Nav() {
                       </div>
                       <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
                         {callsToAction.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
                             href={item.href}
                             className="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-200"
                           >
                             <item.icon aria-hidden="true" className="size-5 flex-none text-gray-400" />
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -149,7 +150,7 @@ export default function Nav() {
         <div className="fixed inset-0 z-50" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
+            <Link href={"#"} className="-m-1.5 p-1.5">
               <span className="sr-only">SealedTrust</span>
               <img
                 alt="SealedTrust Logo"
@@ -158,7 +159,7 @@ export default function Nav() {
                 height={32}
                 className="h-8 w-auto"
               />
-            </a>
+            </Link>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(false)}
@@ -187,13 +188,13 @@ export default function Nav() {
                     {openDropdown === item.name && (
                       <div className="pl-4">
                         {item.items?.map((subItem) => (
-                          <a
+                          <Link
                             key={subItem.name}
                             href={subItem.href}
                             className="block rounded-lg px-3 py-3 text-base text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors duration-200"
                           >
                             {subItem.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     )}
