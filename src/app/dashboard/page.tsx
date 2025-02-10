@@ -3,7 +3,7 @@ import TransactionTable from "../components/dashboard/transactions/TransactionTa
 // import { isLoggedIn } from "../api/auth/auth";
 // import { redirect } from "next/navigation";
 import Link from "next/link";
-import GetEscrow from "../components/GetEscrow";
+import GetEscrow from "../api/contract-interactions/GetEscrow";
 
 const navLinks = [
     { name: 'All', href: '#' },
