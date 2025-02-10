@@ -5,6 +5,7 @@ import { Dialog } from "@headlessui/react";
 import { useState } from "react";
 import SignInButton from "./SignInButton";
 import Link from "next/link";
+import Image from "next/image";
 
 interface NavigationItem {
   name: string;
@@ -66,7 +67,7 @@ export default function Nav() {
           <div className="flex items-center">
             <Link href="#" className="flex -m-1.5 p-1.5">
               <span className="sr-only">Sealed Trust</span>
-              <img
+              <Image
                 alt="SealedTrust Logo"
                 src="https://sealed-trust.vercel.app/favicon.ico"
                 width={32}
@@ -152,9 +153,9 @@ export default function Nav() {
           <div className="flex items-center justify-between">
             <Link href={"#"} className="-m-1.5 p-1.5">
               <span className="sr-only">SealedTrust</span>
-              <img
+              <Image
                 alt="SealedTrust Logo"
-                src="window.svg"
+                src="/window.svg"
                 width={32}
                 height={32}
                 className="h-8 w-auto"

@@ -1,6 +1,7 @@
 'use client'
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import StyledDropdown from "./StyledDropdown";
+import Image from "next/image";
 
 
 export default function Header() {
@@ -21,9 +22,9 @@ export default function Header() {
                             {/* First Dropdown */}
                             <div className="relative w-full flex">
                                 <select id="role" name="role" className="w-full appearance-none border border-gray-300 rounded-l-md px-4 py-2 pr-10 focus:outline-none">
-                                    <option value="Brokering">I'm Brokering</option>
-                                    <option value="Buying">I'm Buying</option>
-                                    <option value="Selling">I'm Selling</option>
+                                    <option value="Brokering">I&#39;m Brokering</option>
+                                    <option value="Buying">I&#39;m Buying</option>
+                                    <option value="Selling">I&#39;m Selling</option>
                                 </select>
                                 <ChevronDownIcon
                                     className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-gray-900 pointer-events-none"
@@ -69,12 +70,13 @@ export default function Header() {
                 </button>
             </div>
             <div className="w-full sm:w-1/2 mx-2">
-                <div className="card w-full">
-                    <figure>
-                        <img
-                            src="https://d1zm2628k0l6s5.cloudfront.net/wp-content/uploads/2023/03/escrow_with_eqi_.png"
-                            alt="How Escrow Works" />
-                    </figure>
+                <div className="card w-full relative h-[300px]">
+                    <Image
+                        fill
+                        className="object-contain"
+                        src="/escrow.png"
+                        alt="How Escrow Works"
+                    />
                 </div>
             </div>
         </div>

@@ -5,15 +5,14 @@ import { createWallet, inAppWallet } from "thirdweb/wallets";
 import { NextPage } from "next";
 import { defineChain } from "thirdweb";
 import { generatePayload, isLoggedIn, login, logout } from "../api/auth/auth";
-import { useRouter } from "next/navigation";
+
 
 const SignInButton: NextPage = () => {
-    const router = useRouter();
 
     const wallets = [
         inAppWallet({
             auth: {
-                options: ["google", "discord", "telegram", "farcaster", "email", "x", "passkey", "phone", "facebook", "github", "twitch", "apple",],
+                options: ["google", "discord", "telegram", "farcaster", "email", "x", "passkey", "phone", "facebook", "github", "apple"],
             },
             hidePrivateKeyExport: true,
         }),
@@ -27,6 +26,7 @@ const SignInButton: NextPage = () => {
     const chainID = 8453;
 
     return (
+
         <ConnectButton
             client={client}
             wallets={wallets}
@@ -48,41 +48,35 @@ const SignInButton: NextPage = () => {
                     inputAutofillBg: "hsl(0, 0.00%, 98.00%)",
                 },
             })}
-            connectButton={{ label: "Sign In" }}
+            connectButton={{
+                label: "Sign In",
+            }}
             connectModal={{
                 size: "wide",
-                title: "Welcome ",
-                titleIcon:
-                    "https://sealed-trust.vercel.app/favicon.ico",
+                title: "Welcome",
+                titleIcon: "/logo.png",
                 showThirdwebBranding: false,
-                termsOfServiceUrl: "https:// sealedtrust.com",
-                privacyPolicyUrl: "https:// sealedtrust.com",
+                termsOfServiceUrl: "https://sealedtrust.com",
+                privacyPolicyUrl: "https://sealedtrust.com",
             }}
-
             auth={{
                 isLoggedIn: async (address) => {
                     console.log("checking if logged in!", { address });
                     return await isLoggedIn();
                 },
-
+                
                 doLogin: async (params) => {
                     console.log("logging in!");
-                    const result = await login(params);
-                    if (result.success && result.redirectUrl){
-                        router.push(result.redirectUrl);
-                    }
+                    await login(params);
                 },
 
-                getLoginPayload: async ({ address }) => generatePayload({
-                    address, chainId: chainID
-                }),
+                getLoginPayload: async ({ address }) => generatePayload({ address, chainId: chainID }),
 
                 doLogout: async () => {
                     console.log("logging out!");
                     await logout();
                 },
             }}
-
         />
     );
 };

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
@@ -8,7 +9,7 @@ export default function Footer() {
                     <div className="mb-4">
                         <Link href={"#"} className="flex -m-1.5 p-1.5">
                             <span className="sr-only">Sealed Trust</span>
-                            <img
+                            <Image
                                 alt="SealedTrust Logo"
                                 src="https://sealed-trust.vercel.app/favicon.ico"
                                 width={32}

@@ -4,10 +4,9 @@ import ItemCategoryDropdown from "@/app/components/dashboard/transactions/ItemCa
 import RoleDropdown from "@/app/components/dashboard/transactions/RoleDropdown";
 import ShippingFeePaidBy from "@/app/components/dashboard/transactions/ShippingFeePaidBy";
 import ShippingMethodDropdown from "@/app/components/dashboard/transactions/ShippingMethodDropdown";
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from "@heroicons/react/16/solid";
 
 
-export default function Dash() {
+export default function CreateEscrow() {
     return (
         <form className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md">
 
@@ -129,7 +128,7 @@ export default function Dash() {
                         < ShippingFeePaidBy />
                     </div>
                     <div className="col-span-3 sm:col-span-full flex justify-end">
-                        <button className="btn hover:btn-success btn-wide hover:text-white text-white bg-green-500 text-base font-medium">Update Item</button>
+                        <CreateEscrow />
                     </div>
 
                 </div>

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import LogoCloud from "./components/LogoCloud";
 import Header from "./components/Header";
 import Nav from "./components/Nav";

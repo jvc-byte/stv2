@@ -1,9 +1,8 @@
-import { PhoneIcon, PlayCircleIcon } from "@heroicons/react/16/solid";
 import TransactionTable from "../components/dashboard/transactions/TransactionTable";
 // import { isLoggedIn } from "../api/auth/auth";
 // import { redirect } from "next/navigation";
 import Link from "next/link";
-import GetEscrow from "../api/contract-interactions/GetEscrow";
+// import GetEscrow from "../api/contract-interactions/GetEscrow";
 
 const navLinks = [
     { name: 'All', href: '#' },
@@ -20,7 +19,7 @@ const Dash = async () => {
 
     return (
         <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-6xl my-6 px-4 sm:px-6 lg:px-8">
-            <GetEscrow />
+            {/* <GetEscrow /> */}
             <div className="">
                 <h1 className="text-3xl font-bold text-gray-900 my-10">My Transactions</h1>
                 <div className=" flex gap-4 mt-1 text-sm border-b border-gray-400 mb-6">

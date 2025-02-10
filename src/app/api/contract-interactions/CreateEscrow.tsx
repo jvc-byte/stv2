@@ -4,7 +4,9 @@
 // import { useSendTransaction } from "thirdweb/react";
 // import { baseSepolia } from "thirdweb/chains";
 
-// export default function CreateEscrow({ escrowData }) {
+// type escowData = {title: string, role: string, currency: string, inspectionPeriod: number, itemName: string, price: number, itemCategory: string, itemDescription: string, shippingMethod: string, shippingFeePaidBy: string};
+
+// export default function CreateEscrow(escrowData: escowData) {
 //     const { mutate: sendTransaction, isPending, isError, error } = useSendTransaction();
 
 //     const onClick = () => {
@@ -33,9 +35,9 @@
 //                 title,
 //                 role,
 //                 currency,
-//                 inspectionPeriod,
+//                 BigInt(inspectionPeriod),
 //                 itemName,
-//                 price,
+//                 BigInt(price),
 //                 itemCategory,
 //                 itemDescription,
 //                 shippingMethod,
@@ -59,11 +61,11 @@
 //     };
 
 //     return (
-//         <div>
-//             <button onClick={onClick} disabled={isPending}>
+//         <>
+//             <button className="btn hover:btn-success btn-wide hover:text-white text-white bg-green-500 text-base font-medium" onClick={onClick} disabled={isPending}>
 //                 {isPending ? "Creating Escrow..." : "Create Escrow"}
 //             </button>
 //             {isError && <p style={{ color: "red" }}>Error: {error.message}</p>}
-//         </div>
+//         </>
 //     );
 // }
