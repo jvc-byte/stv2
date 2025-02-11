@@ -37,12 +37,11 @@ export default function DashNav() {
                 <Link href='/dashboard'>
                   <Image
                     alt="SealedTrust"
-                    src="https://sealed-trust.vercel.app/favicon.ico"
-                    width={16} // h-8 is 32px 
-                    height={16}
+                    src="/logo.png"
+                    width={128} // h-8 is 32px 
+                    height={64}
                     className="w-auto"
                   />
-                  <p className='font-bold text-xl ml-2 hidden sm:block text-white'>SealedTrust</p>
                 </Link>
               </div>
 
