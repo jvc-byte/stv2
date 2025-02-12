@@ -40,7 +40,7 @@ export default function DashNav() {
                     src="/logo.png"
                     width={128} // h-8 is 32px 
                     height={64}
-                    className="w-auto"
+                    className="w-auto h-auto"
                   />
                 </Link>
               </div>
