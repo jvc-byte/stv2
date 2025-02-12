@@ -4,7 +4,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import SignInButton from '../SignInButton'
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 
 const navigation = [
   { name: 'My Transactions', href: '#', current: true },
