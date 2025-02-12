@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 interface CurrencyDropdownProps {
   value: string;
   onChange: (value: string) => void;
+  id?: string;
 }
 
-const CurrencyDropdown = ({ value, onChange }: CurrencyDropdownProps) => {
+const CurrencyDropdown = ({ value, onChange, id }: CurrencyDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,7 +42,7 @@ const CurrencyDropdown = ({ value, onChange }: CurrencyDropdownProps) => {
   };
 
   return (
-    <div className="relative w-full" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef} id={id}>
       <div
         role="button"
         tabIndex={0}

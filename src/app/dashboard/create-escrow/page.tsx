@@ -77,6 +77,7 @@ export default function CreateEscrow() {
                             My Role
                         </label>
                         <RoleDropdown
+                            id="role"
                             value={formData.role}
                             onChange={(value) => handleDropdownChange('role', value)}
                         />
@@ -87,6 +88,7 @@ export default function CreateEscrow() {
                             Currency
                         </label>
                         <CurrencyDropdown
+                            id="currency"
                             value={formData.currency}
                             onChange={(value) => handleDropdownChange('currency', value)}
                         />
@@ -148,7 +150,7 @@ export default function CreateEscrow() {
                         </div>
                     </div>
 
-                    <div className="col-span-3 sm:col-start-1 will-change-transform inset-0 z-20">
+                    <div className="col-span-3 sm:col-start-1 will-change-transform inset-0 z-[40]">
                         <label htmlFor="itemCategory" className="block text-sm/6 font-medium text-gray-900">
                             Item Category
                         </label>

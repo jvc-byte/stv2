@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 interface RoleDropdownProps {
   value: string;
   onChange: (value: string) => void;
+  id?: string;
 }
 
-const RoleDropdown = ({ value, onChange }: RoleDropdownProps) => {
+const RoleDropdown = ({ value, onChange, id }: RoleDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -40,7 +41,8 @@ const RoleDropdown = ({ value, onChange }: RoleDropdownProps) => {
   };
 
   return (
-    <div className="relative w-full" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef} id={id}>
+      <input type="hidden" id={id} value={value} />
       <div
         role="button"
         tabIndex={0}
@@ -50,8 +52,9 @@ const RoleDropdown = ({ value, onChange }: RoleDropdownProps) => {
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
       >
+        <select id="role" disabled className='sr-only'></select>
         <span className="text-gray-500">{value || 'Select Role...'}</span>
-        
+
         <ChevronDownIcon
           className="absolute right-3 top-1/2 -translate-y-1/2 size-5 text-gray-500 pointer-events-none"
           aria-hidden="true"
