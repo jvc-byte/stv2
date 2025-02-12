@@ -61,7 +61,7 @@ const CurrencyDropdown = ({ value, onChange }: CurrencyDropdownProps) => {
       {isOpen && (
         <div
           role="listbox"
-          className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10"
+          className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-48 overflow-y-auto"
         >
           {currency.map((option, index) => (
             <div

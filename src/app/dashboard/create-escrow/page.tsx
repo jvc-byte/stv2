@@ -5,7 +5,7 @@ import ItemCategoryDropdown from "@/app/components/dashboard/transactions/ItemCa
 import RoleDropdown from "@/app/components/dashboard/transactions/RoleDropdown";
 import ShippingFeePaidBy from "@/app/components/dashboard/transactions/ShippingFeePaidBy";
 import ShippingMethodDropdown from "@/app/components/dashboard/transactions/ShippingMethodDropdown";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 
 export default function CreateEscrow() {
@@ -23,24 +23,30 @@ export default function CreateEscrow() {
         shippingFeePaidBy: ''
     });
 
-    // Handle input changes
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Memoize the handlers to prevent unnecessary re-renders
+    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
-    };
+    }, []);
 
-    // Handle dropdown changes
-    const handleDropdownChange = (name: string, value: string) => {
+    const handleDropdownChange = useCallback((name: string, value: string) => {
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
-    };
+    }, []);
+
+    // Handle form submission
+    const handleSubmit = useCallback((e: React.FormEvent) => {
+        e.preventDefault(); // Prevent default form submission
+        // Form data will be handled by InsertEscrow component
+    }, []);
+
     return (
-        <form className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md">
+        <form onSubmit={handleSubmit} className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md">
 
             <h1 className=" text-center sm:text-justify text-3xl font-bold text-gray-900 my-10 border-b-4 pb-4">Create Escrow</h1>
 
@@ -48,7 +54,7 @@ export default function CreateEscrow() {
             <div className="border-b border-gray-900/10 pb-12">
 
                 <div className="mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div className="col-span-3 sm:col-span-6">
+                    <div className="col-span-3 sm:col-span-6 will-change-transform">
                         <label htmlFor="escrowTitle" className="block text-sm/6 font-medium text-gray-900">
                             Escrow Title
                         </label>
@@ -66,7 +72,7 @@ export default function CreateEscrow() {
                         </div>
                     </div>
 
-                    <div className="col-span-3 sm:col-span-2">
+                    <div className="col-span-3 sm:col-span-2 will-change-transform inset-0 z-20">
                         <label htmlFor="role" className="block text-sm/6 font-medium text-gray-900">
                             My Role
                         </label>
@@ -76,7 +82,7 @@ export default function CreateEscrow() {
                         />
                     </div>
 
-                    <div className="col-span-3 sm:col-span-2">
+                    <div className="col-span-3 sm:col-span-2 will-change-transform inset-0 z-10">
                         <label htmlFor="currency" className="block text-sm/6 font-medium text-gray-900">
                             Currency
                         </label>
@@ -86,7 +92,7 @@ export default function CreateEscrow() {
                         />
                     </div>
 
-                    <div className="col-span-3 sm:col-span-2">
+                    <div className="col-span-3 sm:col-span-2 will-change-transform">
                         <label htmlFor="inspectionPeriod" className="block text-sm/6 font-medium text-gray-900">
                             Inspection period (days)
                         </label>
@@ -104,9 +110,10 @@ export default function CreateEscrow() {
                     </div>
 
                     <h2 className="col-span-3 sm:col-span-full text-xl font-semibold text-gray-900 border-b-2 pb-4">Escrow Details</h2>
+                </div>
 
-
-                    <div className="col-span-3">
+                <div className="mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="col-span-3 will-change-transform">
                         <label htmlFor="itemName" className="block text-sm/6 font-medium text-gray-900">
                             Item Name
                         </label>
@@ -123,7 +130,7 @@ export default function CreateEscrow() {
                             />
                         </div>
                     </div>
-                    <div className="col-span-3">
+                    <div className="col-span-3 will-change-transform">
                         <label htmlFor="price" className="block text-sm/6 font-medium text-gray-900">
                             Price
                         </label>
@@ -141,7 +148,7 @@ export default function CreateEscrow() {
                         </div>
                     </div>
 
-                    <div className="col-span-3 sm:col-start-1">
+                    <div className="col-span-3 sm:col-start-1 will-change-transform inset-0 z-20">
                         <label htmlFor="itemCategory" className="block text-sm/6 font-medium text-gray-900">
                             Item Category
                         </label>
@@ -151,7 +158,7 @@ export default function CreateEscrow() {
                         />
                     </div>
 
-                    <div className="col-span-3">
+                    <div className="col-span-3 will-change-transform">
                         <label htmlFor="itemDescription" className="block text-sm/6 font-medium text-gray-900">
                             Item Description
                         </label>
@@ -167,7 +174,7 @@ export default function CreateEscrow() {
                             />
                         </div>
                     </div>
-                    <div className="col-span-3 sm:col-start-1">
+                    <div className="col-span-3 sm:col-start-1 will-change-transform inset-0 z-20">
                         <label htmlFor="shippingMethod" className="block text-sm/6 font-medium text-gray-900">
                             Shipping Method
                         </label>
@@ -176,7 +183,7 @@ export default function CreateEscrow() {
                             onChange={(value) => handleDropdownChange('shippingMethod', value)}
                         />
                     </div>
-                    <div className="col-span-3">
+                    <div className="col-span-3 will-change-transform inset-0 z-10">
                         <label htmlFor="shipFeePaidBy" className="block text-sm/6 font-medium text-gray-900">
                             Shipping fee paid by
                         </label>
@@ -185,7 +192,7 @@ export default function CreateEscrow() {
                             onChange={(value) => handleDropdownChange('shippingFeePaidBy', value)}
                         />
                     </div>
-                    <div className="col-span-3 sm:col-span-full flex justify-end">
+                    <div className="col-span-3 sm:col-span-full flex justify-end will-change-transform">
                         <InsertEscrow
                             title={formData.escrowTitle}
                             role={formData.role}
@@ -199,7 +206,6 @@ export default function CreateEscrow() {
                             shippingFeePaidBy={formData.shippingFeePaidBy}
                         />
                     </div>
-
                 </div>
             </div>
         </form>

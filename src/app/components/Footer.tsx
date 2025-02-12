@@ -11,7 +11,7 @@ export default function Footer() {
                             <span className="sr-only">Sealed Trust</span>
                             <Image
                                 alt="SealedTrust Logo"
-                                src="https://sealed-trust.vercel.app/favicon.ico"
+                                src="/logo.png"
                                 width={32}
                                 height={32}
                                 className="h-8 w-auto"

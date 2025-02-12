@@ -63,7 +63,7 @@ const ItemCategoryDropdown = ({ value, onChange }: ItemCategoryDropdownProps) =>
       {isOpen && (
         <div
           role="listbox"
-          className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-60 overflow-y-auto"
+          className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-48 overflow-y-auto"
         >
           {category.map((option, index) => (
             <div
