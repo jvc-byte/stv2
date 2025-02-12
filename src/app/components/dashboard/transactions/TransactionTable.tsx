@@ -29,15 +29,10 @@ export default function TransactionTable() {
     const account = useActiveAccount();
     const [escrowsData, setEscrowsData] = useState<Escrow[]>([]);
 
-    // Ensure wallet is connected
-    if (!account) {
-        return <div className="text-center font-bold">Please connect your wallet</div>;
-    }
-
     const { data: escrows, isPending } = useReadContract({
         contract,
         method: "function getEscrowsByInitiator(address initiator) view returns ((uint256 escrow_id, address initiator, string transaction_title, string role, string currency, uint256 inspection_period, string item_name, uint256 price, string item_category, string item_description, string shipping_method, string shipping_fee_paid_by, uint8 Escrowstatus, uint256 created_on)[])",
-        params: [account?.address],
+        params: () => Promise.resolve([account?.address ?? ""] as const)
     });
 
     useEffect(() => {
@@ -55,7 +50,7 @@ export default function TransactionTable() {
                 item_description: escrow.item_description,
                 shipping_method: escrow.shipping_method,
                 shipping_fee_paid_by: escrow.shipping_fee_paid_by,
-                escrow_status: escrow.Escrowstatus.toString(),  // Match the correct key name
+                escrow_status: escrow.Escrowstatus.toString(),
                 created_on: new Date(Number(escrow.created_on) * 1000).toLocaleString(),
             }));
 
@@ -63,8 +58,20 @@ export default function TransactionTable() {
         }
     }, [escrows]);
 
-    if (isPending) return <div>Loading...</div>;
-    if (!escrows || escrows.length === 0) return <div>No transactions found</div>;
+    // Render loading state
+    if (isPending) {
+        return <div>Loading...</div>;
+    }
+
+    // Render wallet connection state
+    if (!account) {
+        return <div className="text-center font-bold">Please connect your wallet</div>;
+    }
+
+    // Render empty state
+    if (!escrows || escrows.length === 0) {
+        return <div>No transactions found</div>;
+    }
 
     return (
         <div className="overflow-x-auto">
