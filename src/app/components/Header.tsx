@@ -52,7 +52,8 @@ export default function Header() {
                                             <option value="udc">USDC</option>
                                             <option value="usdt">USDT</option>
                                             <option value="eth">ETH</option>
-                                            <option value="ngn">NGN</option>
+                                            <option value="stngn">STNGN</option>
+                                            <option value="brk">BRK</option>
                                         </select>
                                         <ChevronDownIcon
                                             className="absolute right-2 top-1/2 -translate-y-1/2 size-5 text-gray-900 pointer-events-none"

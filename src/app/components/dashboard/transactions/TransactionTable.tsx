@@ -95,7 +95,7 @@ export default function TransactionTable() {
                             <td>{escrow.created_on}</td>
                             <td>{escrow.price} {escrow.currency}</td>
                             <td>{escrow.role}</td>
-                            <td><TransactionStatus status={"18"} /></td>
+                            <td><TransactionStatus status={escrow.escrow_status} /></td>
                             <td className="font-semibold text-center shadow-xs text-green-700 text-sm rounded-md py-1 px-1 cursor-pointer hover:bg-teal-600 hover:text-white">
                                 Details
                             </td>
