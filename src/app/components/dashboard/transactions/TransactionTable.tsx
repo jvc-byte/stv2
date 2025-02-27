@@ -60,17 +60,17 @@ export default function TransactionTable() {
 
     // Render loading state
     if (isPending) {
-        return <div>Loading...</div>;
+        return <div className="text-center font-bold text-gray-500">Loading...</div>;
     }
 
     // Render wallet connection state
     if (!account) {
-        return <div className="text-center font-bold">Please connect your wallet</div>;
+        return <div className="text-center font-bold text-gray-500">Please connect your wallet</div>;
     }
 
     // Render empty state
     if (!escrows || escrows.length === 0) {
-        return <div>No transactions found</div>;
+        return <div className="text-center font-bold text-gray-500">No transactions found</div>;
     }
 
     return (
@@ -95,7 +95,7 @@ export default function TransactionTable() {
                             <td>{escrow.created_on}</td>
                             <td>{escrow.price} {escrow.currency}</td>
                             <td>{escrow.role}</td>
-                            <td><TransactionStatus status={escrow.escrow_status} /></td>
+                            <td><TransactionStatus status={"18"} /></td>
                             <td className="font-semibold text-center shadow-xs text-green-700 text-sm rounded-md py-1 px-1 cursor-pointer hover:bg-teal-600 hover:text-white">
                                 Details
                             </td>
