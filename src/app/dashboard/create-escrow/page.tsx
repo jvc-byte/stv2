@@ -157,7 +157,7 @@ export default function CreateEscrow() {
                             alert(`Failed to create escrow: ${error.message}`);
                         },
                     });
-                } catch (error: any) {
+                } catch (error: string | any) {
                     console.error('Error creating escrow:', error);
                     alert(`Failed to create escrow: ${error.message}`);
                 }
@@ -165,7 +165,7 @@ export default function CreateEscrow() {
                 console.log('Form has errors, please fix them.');
             }
         },
-        [formData, sendTransaction]
+        [formData, sendTransaction, validateForm]
     );
 
     return (
