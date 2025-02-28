@@ -49,16 +49,16 @@ const SignInButton: NextPage = () => {
                 },
             })}
             connectButton={{
-                label: "Get Started",
+                label: "Sign In",
                 style: {
-                    borderRadius: "1rem",
-                    border: "2px solid rgb(91, 190, 196)",
+                    border: "2px solid rgb(255, 255, 255)",
                     width: "100%",
-                    fontSize: "1.2rem",
-                    fontWeight: "bold",
+                    fontSize: "1.1rem",
+                    fontWeight: "semibold",
                     textAlign: "center",
-                    color: "rgb(91, 190, 196)",
-                    backgroundColor: "rgb(255, 255, 255)",
+                    letterSpacing: "0.05em",
+                    color: "rgb(255, 255, 255)",
+                    backgroundColor: "rgb(12, 148, 136)",
                     boxShadow: "rgb(91, 190, 196)",
                     transition: "all 0.3s ease",
                 }
