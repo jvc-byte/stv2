@@ -1,3 +1,5 @@
+
+
 'use client';
 import { client } from "@/lib/client";
 import { CREATE_ESCROW_CONTRACT_ADDRESS } from "@/lib/contracts";
@@ -58,8 +60,8 @@ export default function CreateEscrow() {
         }));
     }, []);
 
-    // Validation function
-    const validateForm = () => {
+    // Validation function (memoized)
+    const validateForm = useCallback(() => {
         const newErrors: Record<string, string> = {};
 
         if (!formData.escrowTitle.trim()) {
@@ -95,7 +97,7 @@ export default function CreateEscrow() {
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0; // Return true if no errors
-    };
+    }, [formData]); // Add formData as a dependency
 
     // Handle form submission
     const handleSubmit = useCallback(
@@ -152,20 +154,28 @@ export default function CreateEscrow() {
                                 shippingFeePaidBy: '',
                             });
                         },
-                        onError: (error) => {
+                        onError: (error: unknown) => {
                             console.error("Transaction failed:", error);
-                            alert(`Failed to create escrow: ${error.message}`);
+                            if (error instanceof Error) {
+                                alert(`Failed to create escrow: ${error.message}`);
+                            } else {
+                                alert('Failed to create escrow: An unknown error occurred.');
+                            }
                         },
                     });
-                } catch (error: string | any) {
+                } catch (error: unknown) {
                     console.error('Error creating escrow:', error);
-                    alert(`Failed to create escrow: ${error.message}`);
+                    if (error instanceof Error) {
+                        alert(`Failed to create escrow: ${error.message}`);
+                    } else {
+                        alert('Failed to create escrow: An unknown error occurred.');
+                    }
                 }
             } else {
                 console.log('Form has errors, please fix them.');
             }
         },
-        [formData, sendTransaction, validateForm]
+        [formData, sendTransaction, validateForm] // Add validateForm to the dependency array
     );
 
     return (

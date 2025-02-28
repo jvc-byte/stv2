@@ -52,7 +52,6 @@ const SignInButton: NextPage = () => {
                 label: "Sign In",
                 style: {
                     border: "2px solid rgb(255, 255, 255)",
-                    width: "100%",
                     fontSize: "1.1rem",
                     fontWeight: "semibold",
                     textAlign: "center",
