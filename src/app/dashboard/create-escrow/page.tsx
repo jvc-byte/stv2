@@ -1,5 +1,3 @@
-
-
 'use client';
 import { client } from "@/lib/client";
 import { CREATE_ESCROW_CONTRACT_ADDRESS } from "@/lib/contracts";
@@ -12,6 +10,7 @@ import RoleDropdown from "@/app/components/dashboard/transactions/RoleDropdown";
 import ShippingFeePaidBy from "@/app/components/dashboard/transactions/ShippingFeePaidBy";
 import ShippingMethodDropdown from "@/app/components/dashboard/transactions/ShippingMethodDropdown";
 import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 export default function CreateEscrow() {
     // State for form values
@@ -33,6 +32,9 @@ export default function CreateEscrow() {
 
     // Hook for sending transactions
     const { mutate: sendTransaction, isPending } = useSendTransaction();
+
+    // Hook for navigation
+    const router = useRouter();
 
     // Memoize the handlers to prevent unnecessary re-renders
     const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,6 +155,9 @@ export default function CreateEscrow() {
                                 shippingMethod: '',
                                 shippingFeePaidBy: '',
                             });
+
+                            // Redirect to another page
+                            router.push('/dashboard/transaction-details'); // Replace with your desired path
                         },
                         onError: (error: unknown) => {
                             console.error("Transaction failed:", error);
@@ -175,7 +180,7 @@ export default function CreateEscrow() {
                 console.log('Form has errors, please fix them.');
             }
         },
-        [formData, sendTransaction, validateForm] // Add validateForm to the dependency array
+        [formData, sendTransaction, validateForm, router] // Add router to the dependency array
     );
 
     return (

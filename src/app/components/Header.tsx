@@ -2,6 +2,7 @@
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import StyledDropdown from "./StyledDropdown";
 import Image from "next/image";
+import SignInButton from "./SignInButton";
 
 
 export default function Header() {
@@ -65,10 +66,10 @@ export default function Header() {
                         </div>
                     </div>
                 </div>
-                <button className="relative bg-teal-200 overflow-hidden group btn w-full mt-2">
-                    <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-violet-600 transition-transform duration-500 transform translate-x-[-100%] group-hover:translate-x-0"></span>
-                    <span className="relative text-black group-hover:bg-transparent transition-colors duration-300">Get Started Now</span>
-                </button>
+
+                <div className="">
+                <span className="bg-teal-700 btn w-full mt-2 hover:bg-teal-800 h-full"><SignInButton /></span>
+                </div>
             </div>
             <div className="w-full sm:w-1/2 mx-2">
                 <div className="card w-full relative h-[300px]">

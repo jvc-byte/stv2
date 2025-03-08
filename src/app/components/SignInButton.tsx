@@ -49,15 +49,14 @@ const SignInButton: NextPage = () => {
                 },
             })}
             connectButton={{
-                label: "Sign In",
+                label: "Create Escrow",
                 style: {
-                    border: "2px solid rgb(255, 255, 255)",
-                    fontSize: "1.1rem",
+                    fontSize: "1rem",
                     fontWeight: "semibold",
                     textAlign: "center",
                     letterSpacing: "0.05em",
                     color: "rgb(255, 255, 255)",
-                    backgroundColor: "rgb(12, 148, 136)",
+                    backgroundColor: "rgb(15, 117, 106)",
                     boxShadow: "rgb(91, 190, 196)",
                     transition: "all 0.3s ease",
                 }
