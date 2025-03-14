@@ -1,22 +1,87 @@
-"use client"
+"use client";
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 const EscrowDetails = () => {
     const [countryCode, setCountryCode] = useState('US');
     const [email, setEmail] = useState('');
     const [agreeToTerms, setAgreeToTerms] = useState(false);
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
+    const [emailSent, setEmailSent] = useState(false);
 
-    const handleEmailChange = (e: any) => {
+    const searchParams = useSearchParams();
+
+    // Retrieve transaction details from query parameters
+    const transactionDetails = {
+        transactionId: searchParams.get('transactionId') || 'N/A',
+        itemName: searchParams.get('itemName') || 'N/A',
+        itemPrice: searchParams.get('price') || 'N/A',
+        escrowTitle: searchParams.get('escrowTitle') || 'N/A',
+        initiatorRole: searchParams.get('role') || 'N/A',
+        currency: searchParams.get('currency') || 'N/A',
+        inspectionPeriod: searchParams.get('inspectionPeriod') || 'N/A',
+        shippingMethod: searchParams.get('shippingMethod') || 'N/A',
+        shippingFeePaidBy: searchParams.get('shippingFeePaidBy') || 'N/A',
+        itemCategory: searchParams.get('itemCategory') || 'N/A',
+        itemDescription: searchParams.get('itemDescription') || 'N/A',
+        transactionHash: searchParams.get('transactionHash') || 'N/A',
+        blockExplorerUrl: searchParams.get('blockExplorerUrl') || 'N/A',
+        chainId: searchParams.get('chainId') || 'N/A',
+        chainName: searchParams.get('chainName') || 'N/A',
+        transactionStatus: searchParams.get('transactionStatus') || 'N/A',
+        blockNumber: searchParams.get('blockNumber') || 'N/A',
+        timestamp: searchParams.get('timestamp') || 'N/A',
+        method: searchParams.get('method') || 'N/A',
+        initiatorAddress: searchParams.get('initiatorAddress') || 'N/A',
+        clientId: searchParams.get('clientId') || 'N/A',
+        subTotal: searchParams.get('subTotal') || 'N/A',
+        escrowFeePaidBy: searchParams.get('escrowFeePaidBy') || 'N/A',
+        buyerPrice: searchParams.get('buyerPrice') || 'N/A',
+        sellerProceeds: searchParams.get('sellerProceeds') || 'N/A',
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
     };
 
-    const handleCheckboxChange = (e: any) => {
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAgreeToTerms(e.target.checked);
+    };
+
+    const handleSendEmail = async () => {
+        if (!email || !agreeToTerms) {
+            alert('Please provide a valid email address and agree to the terms.');
+            return;
+        }
+
+        setIsSendingEmail(true);
+
+        try {
+            const response = await fetch('http://localhost:5000/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, transactionDetails }),
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                setEmailSent(true);
+                alert('Transaction details sent to your email!');
+            } else {
+                alert('Failed to send email. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            alert('An error occurred while sending the email.');
+        } finally {
+            setIsSendingEmail(false);
+        }
     };
 
 
     return (
-
         <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md pb-8">
             <div className="text-black flex flex-col">
 
@@ -32,16 +97,16 @@ const EscrowDetails = () => {
                         <table className="">
                             <tbody>
                                 <tr>
-                                    <td className="p-2 font-semibold w-1/4">Transaction ID:</td>
-                                    <td className="p-2 w-1/4">#31641461</td>
+                                    <td className="p-2 font-semibold w-1/4">Transaction Hash:</td>
+                                    <td className="p-2 w-1/4">{transactionDetails.transactionHash}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/4">Item Name:</td>
-                                    <td className="p-2 w-1/4">value</td>
+                                    <td className="p-2 w-1/4">{transactionDetails.itemName}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Item Price:</td>
-                                    <td className="p-2 font-mono">value</td>
+                                    <td className="p-2 font-mono">{transactionDetails.itemPrice}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -51,19 +116,19 @@ const EscrowDetails = () => {
                             <tbody>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/4">Escrow Title:</td>
-                                    <td className="p-2 w-1/4">value</td>
+                                    <td className="p-2 w-1/4">{transactionDetails.escrowTitle}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Initaitor Role:</td>
-                                    <td className="p-2 font-mono">value</td>
+                                    <td className="p-2 font-mono">{transactionDetails.initiatorRole}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Currency:</td>
-                                    <td className="p-2">value</td>
+                                    <td className="p-2">{transactionDetails.currency}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Inspection Period</td>
-                                    <td className="p-2">value</td>
+                                    <td className="p-2">{transactionDetails.inspectionPeriod}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -73,19 +138,19 @@ const EscrowDetails = () => {
                             <tbody>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/4">Shipping Method:</td>
-                                    <td className="p-2 w-1/4">value</td>
+                                    <td className="p-2 w-1/4">{transactionDetails.shippingMethod}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Shipping Fee Paid By:</td>
-                                    <td className="p-2 font-mono">value</td>
+                                    <td className="p-2 font-mono">{transactionDetails.shippingFeePaidBy}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Item Category:</td>
-                                    <td className="p-2">value</td>
+                                    <td className="p-2">{transactionDetails.itemCategory}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Item Description:</td>
-                                    <td className="p-2">value</td>
+                                    <td className="p-2">{transactionDetails.itemDescription}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -97,12 +162,8 @@ const EscrowDetails = () => {
                         <table className="">
                             <tbody>
                                 <tr>
-                                    <td className="p-2 font-semibold w-1/4">Transaction Hash:</td>
-                                    <td className="p-2 w-1/4">value</td>
-                                </tr>
-                                <tr>
                                     <td className="p-2 font-semibold">Block Explorer URL:</td>
-                                    <td className="p-2 font-mono">value</td>
+                                    <td className="p-2 font-mono">{transactionDetails.blockExplorerUrl}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -112,19 +173,19 @@ const EscrowDetails = () => {
                             <tbody>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/4">Chain ID:</td>
-                                    <td className="p-2 w-1/4">value</td>
+                                    <td className="p-2 w-1/4">{transactionDetails.chainId}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Chain Name:</td>
-                                    <td className="p-2 font-mono">value</td>
+                                    <td className="p-2 font-mono">{transactionDetails.chainName}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Transaction Status:</td>
-                                    <td className="p-2">success</td>
+                                    <td className="p-2">{transactionDetails.transactionStatus}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Block Number:</td>
-                                    <td className="p-2">22855886</td>
+                                    <td className="p-2">{transactionDetails.blockNumber}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -134,19 +195,19 @@ const EscrowDetails = () => {
                             <tbody>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/4">Timestamp:</td>
-                                    <td className="p-2 w-1/4">Mar 09 2025 01:27:40 AM (+01:00 UTC)</td>
+                                    <td className="p-2 w-1/4">{transactionDetails.timestamp}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Method:</td>
-                                    <td className="p-2 font-mono">value</td>
+                                    <td className="p-2 font-mono">{transactionDetails.method}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Initiator Address:</td>
-                                    <td className="p-2">value</td>
+                                    <td className="p-2">{transactionDetails.initiatorAddress}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Client ID:</td>
-                                    <td className="p-2">184b4b84b53c73f73c3abb20320f9a28</td>
+                                    <td className="p-2">{transactionDetails.clientId}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -160,23 +221,23 @@ const EscrowDetails = () => {
                             <tbody>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/4">Sub-Total:</td>
-                                    <td className="p-2 w-1/4">value</td>
+                                    <td className="p-2 w-1/4">{transactionDetails.subTotal}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/4">Escrow Fee Paid By:</td>
-                                    <td className="p-2 w-1/4">value</td>
+                                    <td className="p-2 w-1/4">{transactionDetails.escrowFeePaidBy}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Buyer Price:</td>
-                                    <td className="p-2 font-mono">value</td>
+                                    <td className="p-2 font-mono">{transactionDetails.buyerPrice}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold">Seller Proceeds:</td>
-                                    <td className="p-2 font-mono">value</td>
+                                    <td className="p-2 font-mono">{transactionDetails.sellerProceeds}</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <h2 className="text-center font-light italic text-gray-500 my-2 mt-4 col-span-6">All prices are in ETH. Taxes may apply.</h2>
+                        <h2 className="text-center font-light italic text-gray-500 my-2 mt-4 col-span-6">All prices are in {transactionDetails.currency}. Taxes may apply.</h2>
                     </div>
                 </div>
 
@@ -235,7 +296,13 @@ const EscrowDetails = () => {
 
                 {/* Action Buttons */}
                 <div className="mt-4 flex justify-center gap-4">
-                    <button className="bg-teal-500 text-white btn wide px-6 py-2 rounded-md hover:bg-teal-700">Start Transaction</button>
+                    <button
+                        onClick={handleSendEmail}
+                        disabled={isSendingEmail || emailSent}
+                        className="bg-teal-500 text-white btn wide px-6 py-2 rounded-md hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    >
+                        {isSendingEmail ? 'Sending...' : emailSent ? 'Email Sent!' : 'Send Transaction Details'}
+                    </button>
                 </div>
             </div>
         </div>

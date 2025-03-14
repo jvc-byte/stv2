@@ -1,19 +1,15 @@
 'use client';
-import { client } from "@/lib/client";
-import { CREATE_ESCROW_CONTRACT_ADDRESS } from "@/lib/contracts";
-import { getContract, prepareContractCall } from "thirdweb";
+import { useCallback, useState } from "react";
 import { useSendTransaction } from "thirdweb/react";
-import { baseSepolia } from "thirdweb/chains";
+import { useRouter } from "next/navigation";
+import { createEscrowTransaction } from "./api/CreateEscrow";
 import CurrencyDropdown from "@/app/components/dashboard/transactions/CurrencyDropdown";
 import ItemCategoryDropdown from "@/app/components/dashboard/transactions/ItemCategory";
 import RoleDropdown from "@/app/components/dashboard/transactions/RoleDropdown";
 import ShippingFeePaidBy from "@/app/components/dashboard/transactions/ShippingFeePaidBy";
 import ShippingMethodDropdown from "@/app/components/dashboard/transactions/ShippingMethodDropdown";
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
 
 export default function CreateEscrow() {
-    // State for form values
     const [formData, setFormData] = useState({
         escrowTitle: '',
         role: '',
@@ -27,160 +23,96 @@ export default function CreateEscrow() {
         shippingFeePaidBy: ''
     });
 
-    // State for validation errors
     const [errors, setErrors] = useState<Record<string, string>>({});
-
-    // Hook for sending transactions
     const { mutate: sendTransaction, isPending } = useSendTransaction();
-
-    // Hook for navigation
     const router = useRouter();
 
-    // Memoize the handlers to prevent unnecessary re-renders
     const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-        // Clear the error for the field when the user starts typing
-        setErrors(prev => ({
-            ...prev,
-            [name]: ''
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors(prev => ({ ...prev, [name]: '' }));
     }, []);
 
     const handleDropdownChange = useCallback((name: string, value: string) => {
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-        // Clear the error for the field when the user selects a value
-        setErrors(prev => ({
-            ...prev,
-            [name]: ''
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors(prev => ({ ...prev, [name]: '' }));
     }, []);
 
-    // Validation function (memoized)
     const validateForm = useCallback(() => {
         const newErrors: Record<string, string> = {};
 
-        if (!formData.escrowTitle.trim()) {
-            newErrors.escrowTitle = 'Escrow Title is required';
-        }
-        if (!formData.role) {
-            newErrors.role = 'Role is required';
-        }
-        if (!formData.currency) {
-            newErrors.currency = 'Currency is required';
-        }
-        if (formData.inspectionPeriod <= 0 || isNaN(formData.inspectionPeriod)) {
-            newErrors.inspectionPeriod = 'Inspection period must be a valid number greater than 0';
-        }
-        if (!formData.itemName.trim()) {
-            newErrors.itemName = 'Item Name is required';
-        }
-        if (formData.price <= 0 || isNaN(formData.price)) {
-            newErrors.price = 'Price must be a valid number greater than 0';
-        }
-        if (!formData.itemCategory) {
-            newErrors.itemCategory = 'Item Category is required';
-        }
-        if (!formData.itemDescription.trim()) {
-            newErrors.itemDescription = 'Item Description is required';
-        }
-        if (!formData.shippingMethod) {
-            newErrors.shippingMethod = 'Shipping Method is required';
-        }
-        if (!formData.shippingFeePaidBy) {
-            newErrors.shippingFeePaidBy = 'Shipping Fee Paid By is required';
-        }
+        if (!formData.escrowTitle.trim()) newErrors.escrowTitle = 'Escrow Title is required';
+        if (!formData.role) newErrors.role = 'Role is required';
+        if (!formData.currency) newErrors.currency = 'Currency is required';
+        if (formData.inspectionPeriod <= 0 || isNaN(formData.inspectionPeriod)) newErrors.inspectionPeriod = 'Inspection period must be a valid number greater than 0';
+        if (!formData.itemName.trim()) newErrors.itemName = 'Item Name is required';
+        if (formData.price <= 0 || isNaN(formData.price)) newErrors.price = 'Price must be a valid number greater than 0';
+        if (!formData.itemCategory) newErrors.itemCategory = 'Item Category is required';
+        if (!formData.itemDescription.trim()) newErrors.itemDescription = 'Item Description is required';
+        if (!formData.shippingMethod) newErrors.shippingMethod = 'Shipping Method is required';
+        if (!formData.shippingFeePaidBy) newErrors.shippingFeePaidBy = 'Shipping Fee Paid By is required';
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0; // Return true if no errors
-    }, [formData]); // Add formData as a dependency
+        return Object.keys(newErrors).length === 0;
+    }, [formData]);
 
-    // Handle form submission
     const handleSubmit = useCallback(
         async (e: React.FormEvent) => {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
 
             if (validateForm()) {
-                // Form data is valid, proceed with submission
-                console.log('Form is valid, submitting...', formData);
-
                 try {
-                    // Get the contract instance
-                    const contract = getContract({
-                        client: client,
-                        chain: baseSepolia,
-                        address: CREATE_ESCROW_CONTRACT_ADDRESS,
-                    });
+                    const transaction = await createEscrowTransaction(formData);
 
-                    // Prepare the contract call
-                    const createEscrow = prepareContractCall({
-                        contract,
-                        method: "function createEscrow(string _title, string _role, string _currency, uint256 _inspection_period, string _item_name, uint256 _price, string _item_category, string _item_description, string _shipping_method, string _shipping_fee_paid_by) returns (uint256)",
-                        params: [
-                            formData.escrowTitle,
-                            formData.role,
-                            formData.currency,
-                            BigInt(formData.inspectionPeriod),
-                            formData.itemName,
-                            BigInt(formData.price),
-                            formData.itemCategory,
-                            formData.itemDescription,
-                            formData.shippingMethod,
-                            formData.shippingFeePaidBy,
-                        ],
-                    });
-
-                    // Send the transaction
-                    await sendTransaction(createEscrow, {
+                    sendTransaction(transaction, {
                         onSuccess: (receipt) => {
                             console.log("Transaction successful! Receipt:", receipt);
                             alert('Escrow created successfully!');
 
-                            // Reset the form after successful submission
-                            setFormData({
-                                escrowTitle: '',
-                                role: '',
-                                currency: '',
-                                inspectionPeriod: 0,
-                                itemName: '',
-                                price: 0,
-                                itemCategory: '',
-                                itemDescription: '',
-                                shippingMethod: '',
-                                shippingFeePaidBy: '',
-                            });
+                            // Construct query parameters
+                            const queryParams = new URLSearchParams({
+                                escrowTitle: formData.escrowTitle,
+                                role: formData.role,
+                                currency: formData.currency,
+                                inspectionPeriod: formData.inspectionPeriod.toString(),
+                                itemName: formData.itemName,
+                                price: formData.price.toString(),
+                                itemCategory: formData.itemCategory,
+                                itemDescription: formData.itemDescription,
+                                shippingMethod: formData.shippingMethod,
+                                shippingFeePaidBy: formData.shippingFeePaidBy,
+                                transactionHash: receipt.transactionHash,
+                                blockExplorerUrl: `https://base-sepolia.blockscout.com//tx/${receipt.transactionHash}`,
+                                chainId: receipt.chain.toString(),
+                                transactionStatus: 'Success',
+                                blockNumber: '151465165',
+                                timestamp: new Date().toLocaleString(),
+                                method: 'createEscrow',
+                                initiatorAddress: 'receipt.from',
+                                clientId: receipt.client.clientId.toString(), 
+                                subTotal: formData.price.toString(),
+                                escrowFeePaidBy: formData.role,
+                                buyerPrice: formData.price.toString(),
+                                sellerProceeds: (formData.price * 0.95).toString(), // Example calculation
+                            }).toString();
 
-                            // Redirect to another page
-                            router.push('/dashboard/transaction-details'); // Replace with your desired path
+                            // Redirect to transaction-details page with query parameters
+                            router.push(`/dashboard/transaction-details?${queryParams}`);
                         },
                         onError: (error: unknown) => {
                             console.error("Transaction failed:", error);
-                            if (error instanceof Error) {
-                                alert(`Failed to create escrow: ${error.message}`);
-                            } else {
-                                alert('Failed to create escrow: An unknown error occurred.');
-                            }
+                            alert(error instanceof Error ? `Failed to create escrow: ${error.message}` : 'Failed to create escrow: An unknown error occurred.');
                         },
                     });
                 } catch (error: unknown) {
                     console.error('Error creating escrow:', error);
-                    if (error instanceof Error) {
-                        alert(`Failed to create escrow: ${error.message}`);
-                    } else {
-                        alert('Failed to create escrow: An unknown error occurred.');
-                    }
+                    alert(error instanceof Error ? `Failed to create escrow: ${error.message}` : 'Failed to create escrow: An unknown error occurred.');
                 }
             } else {
                 console.log('Form has errors, please fix them.');
             }
         },
-        [formData, sendTransaction, validateForm, router] // Add router to the dependency array
+        [formData, sendTransaction, validateForm, router]
     );
 
     return (

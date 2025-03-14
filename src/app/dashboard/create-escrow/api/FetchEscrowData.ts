@@ -41,5 +41,5 @@ export const FetchEscrowsData = () => {
         }
     }, [escrows]);
 
-    return { escrowsData, isPending, account };
+    return { escrows, escrowsData, isPending, account };
 };
