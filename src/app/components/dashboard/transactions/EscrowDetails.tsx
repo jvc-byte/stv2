@@ -80,183 +80,257 @@ const EscrowDetails = () => {
         }
     };
 
+    const [copied, setCopied] = useState(false);
+
+    // Function to copy text to clipboard
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+        });
+    };
+
+    // Function to truncate text
+    const truncateText = (text: string, maxLength: number) => {
+        if (text.length <= maxLength) return text;
+        return `${text.slice(0, maxLength)}...`;
+    };
+
 
     return (
         <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md pb-8">
             <div className="text-black flex flex-col">
 
-                <div className="grid gap-x-2 gap-y-2 sm:grid-cols-6 mt-4">
+                {/* Transaction Details Header */}
+                <div className="sm:grid-cols-6 mt-4">
                     <div className="flex justify-evenly col-span-6 border rounded-md shadow-md p-2">
-                        <h1 className="text-center rounded-l-lg sm:text-justify text-2xl font-bold text-gray-700 my-2 col-span-6">Transaction Details</h1>
+                        <h1 className="text-center sm:text-justify text-2xl font-bold text-gray-700 my-2 col-span-6">
+                            Transaction Details
+                        </h1>
                     </div>
                 </div>
 
-                <div className="grid gap-x-2 gap-y-2 sm:grid-cols-6">
-                    <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">Escrow Details</h1>
-                    <div className="col-span-6 border rounded-md shadow-md p-2">
-                        <table className="">
+                {/* Escrow Details Section */}
+                <div className="sm:grid-cols-6">
+                    <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">
+                        Escrow Details
+                    </h1>
+                    <div className="col-span-6 border rounded-md shadow-md sm:p-2">
+                        <table className="w-full">
                             <tbody>
                                 <tr>
-                                    <td className="p-2 font-semibold w-1/4">Transaction Hash:</td>
-                                    <td className="p-2 w-1/4">{transactionDetails.transactionHash}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Transaction Hash:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 flex">
+                                        <span className="pr-20 truncate">
+                                            {truncateText(transactionDetails.transactionHash, 10)}
+                                        </span>
+                                        <button
+                                            onClick={() => copyToClipboard(transactionDetails.transactionHash)}
+                                            className="ml-4 text-blue-500 hover:text-blue-700"
+                                        >
+                                            {copied ? 'Copied!' : 'Copy'}
+                                        </button>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td className="p-2 font-semibold w-1/4">Item Name:</td>
-                                    <td className="p-2 w-1/4">{transactionDetails.itemName}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Item Name:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.itemName}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-2 font-semibold">Item Price:</td>
-                                    <td className="p-2 font-mono">{transactionDetails.itemPrice}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Item Price:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.itemPrice}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2">
-                        <table className="">
+                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0">
+                        <table className="w-full">
                             <tbody>
                                 <tr>
-                                    <td className="p-2 font-semibold w-1/4">Escrow Title:</td>
-                                    <td className="p-2 w-1/4">{transactionDetails.escrowTitle}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Escrow Title:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.escrowTitle}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-2 font-semibold">Initaitor Role:</td>
-                                    <td className="p-2 font-mono">{transactionDetails.initiatorRole}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Initiator Role:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.initiatorRole}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-2 font-semibold">Currency:</td>
-                                    <td className="p-2">{transactionDetails.currency}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Currency:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.currency}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-2 font-semibold">Inspection Period</td>
-                                    <td className="p-2">{transactionDetails.inspectionPeriod}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Inspection Period:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.inspectionPeriod}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2">
-                        <table className="">
+                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0">
+                        <table className="w-full">
                             <tbody>
                                 <tr>
-                                    <td className="p-2 font-semibold w-1/4">Shipping Method:</td>
-                                    <td className="p-2 w-1/4">{transactionDetails.shippingMethod}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Shipping Method:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.shippingMethod}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-2 font-semibold">Shipping Fee Paid By:</td>
-                                    <td className="p-2 font-mono">{transactionDetails.shippingFeePaidBy}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Shipping Fee Paid By:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.shippingFeePaidBy}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-2 font-semibold">Item Category:</td>
-                                    <td className="p-2">{transactionDetails.itemCategory}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Item Category:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.itemCategory}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-2 font-semibold">Item Description:</td>
-                                    <td className="p-2">{transactionDetails.itemDescription}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div className="grid gap-x-2 gap-y-2 sm:grid-cols-6 mt-4">
-                    <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">Transaction Receipt</h1>
-                    <div className="col-span-6 border rounded-md shadow-md p-2">
-                        <table className="">
-                            <tbody>
-                                <tr>
-                                    <td className="p-2 font-semibold">Block Explorer URL:</td>
-                                    <td className="p-2 font-mono">{transactionDetails.blockExplorerUrl}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2">
-                        <table className="">
-                            <tbody>
-                                <tr>
-                                    <td className="p-2 font-semibold w-1/4">Chain ID:</td>
-                                    <td className="p-2 w-1/4">{transactionDetails.chainId}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">Chain Name:</td>
-                                    <td className="p-2 font-mono">{transactionDetails.chainName}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">Transaction Status:</td>
-                                    <td className="p-2">{transactionDetails.transactionStatus}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">Block Number:</td>
-                                    <td className="p-2">{transactionDetails.blockNumber}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2">
-                        <table className="">
-                            <tbody>
-                                <tr>
-                                    <td className="p-2 font-semibold w-1/4">Timestamp:</td>
-                                    <td className="p-2 w-1/4">{transactionDetails.timestamp}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">Method:</td>
-                                    <td className="p-2 font-mono">{transactionDetails.method}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">Initiator Address:</td>
-                                    <td className="p-2">{transactionDetails.initiatorAddress}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">Client ID:</td>
-                                    <td className="p-2">{transactionDetails.clientId}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Item Description:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.itemDescription}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div className="grid gap-x-2 gap-y-2 sm:grid-cols-6 mt-4">
-                    <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">Transaction Summary</h1>
+                {/* Transaction Receipt Section */}
+                <div className="sm:grid-cols-6 mt-4">
+                    <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">
+                        Transaction Receipt
+                    </h1>
                     <div className="col-span-6 border rounded-md shadow-md p-2">
-                        <table className="">
+                        <table className="w-full">
                             <tbody>
                                 <tr>
-                                    <td className="p-2 font-semibold w-1/4">Sub-Total:</td>
-                                    <td className="p-2 w-1/4">{transactionDetails.subTotal}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold w-1/4">Escrow Fee Paid By:</td>
-                                    <td className="p-2 w-1/4">{transactionDetails.escrowFeePaidBy}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">Buyer Price:</td>
-                                    <td className="p-2 font-mono">{transactionDetails.buyerPrice}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold">Seller Proceeds:</td>
-                                    <td className="p-2 font-mono">{transactionDetails.sellerProceeds}</td>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Block Explorer Url:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 flex">
+                                        <span className="pr-20 truncate">
+                                            {truncateText(transactionDetails.blockExplorerUrl, 10)}
+                                        </span>
+                                        <button
+                                            onClick={() => copyToClipboard(transactionDetails.blockExplorerUrl)}
+                                            className="ml-4 text-blue-500 hover:text-blue-700"
+                                        >
+                                            {copied ? 'Copied!' : 'Copy'}
+                                        </button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <h2 className="text-center font-light italic text-gray-500 my-2 mt-4 col-span-6">All prices are in {transactionDetails.currency}. Taxes may apply.</h2>
+                    </div>
+                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0">
+                        <table className="w-full">
+                            <tbody>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Chain ID:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.chainId}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Chain Name:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.chainName}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Transaction Status:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.transactionStatus}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Block Number:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.blockNumber}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0">
+                        <table className="w-full">
+                            <tbody>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Timestamp:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 flex">
+                                        <span className="pr-20 truncate">
+                                            {truncateText(transactionDetails.timestamp, 10)}
+                                        </span>
+                                        <button
+                                            onClick={() => copyToClipboard(transactionDetails.timestamp)}
+                                            className="ml-4 text-blue-500 hover:text-blue-700"
+                                        >
+                                            {copied ? 'Copied!' : 'Copy'}
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Method:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.method}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Initiator Address:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 break-words">{transactionDetails.initiatorAddress}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Client ID:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 flex">
+                                        <span className="pr-20 truncate">
+                                            {truncateText(transactionDetails.clientId, 10)}
+                                        </span>
+                                        <button
+                                            onClick={() => copyToClipboard(transactionDetails.clientId)}
+                                            className="ml-4 text-blue-500 hover:text-blue-700"
+                                        >
+                                            {copied ? 'Copied!' : 'Copy'}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div className="grid gap-x-2 gap-y-2 sm:grid-cols-6 mt-4">
-                    <h1 className="text-center rounded-l-lg sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">Seller Details</h1>
-                    <div className="flex justify-evenly col-span-6 border rounded-md shadow-md p-2">
-                        <div className="">
+                {/* Transaction Summary Section */}
+                <div className="sm:grid-cols-6 mt-4">
+                    <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">
+                        Transaction Summary
+                    </h1>
+                    <div className="col-span-6 border rounded-md shadow-md p-2">
+                        <table className="w-full">
+                            <tbody>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Sub-Total:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.subTotal}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Escrow Fee Paid By:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.escrowFeePaidBy}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Buyer Price:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.buyerPrice}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Seller Proceeds:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.sellerProceeds}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h2 className="text-center font-light italic text-gray-500 my-2 mt-4 col-span-6">
+                            All prices are in {transactionDetails.currency}. Taxes may apply.
+                        </h2>
+                    </div>
+                </div>
+
+                {/* Seller Details Section */}
+                <div className="sm:grid-cols-6 mt-4">
+                    <h1 className="text-center rounded-l-lg sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">
+                        Seller Details
+                    </h1>
+                    <div className="flex flex-col sm:flex-row justify-evenly col-span-6 border rounded-md shadow-md p-2 gap-4">
+                        <div className="w-full sm:w-1/2">
                             <label htmlFor="email" className="block text-sm font-medium text-gray-600"></label>
                             <input
                                 id="email"
                                 type="email"
                                 value={email}
                                 onChange={handleEmailChange}
-                                className="block w-full px-8 py-2 text-sm font-normal border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-transparent"
+                                className="block w-full px-4 py-2 text-sm font-normal border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-transparent"
                                 placeholder="your@email.com"
                                 required
                             />
                         </div>
-                        <div className="flex">
+                        <div className="flex w-full sm:w-1/2">
                             <select
                                 id="countries"
                                 value={countryCode}
@@ -269,15 +343,16 @@ const EscrowDetails = () => {
                             </select>
                             <input
                                 type="text"
-                                className="pl-4 border-l-0 rounded-l-0 text-sm h-10 font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-r-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-transparent"
+                                className="flex-1 pl-4 border-l-0 rounded-l-0 text-sm h-10 font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-r-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-transparent"
                                 placeholder="+91 000 000 0000"
                             />
                         </div>
                     </div>
                 </div>
 
-                <div className="flex mt-4 justify-center">
-                    <div className="flex items-center h-5">
+                {/* Terms and Conditions */}
+                <div className="flex mt-4 justify-center text-center">
+                    <div className="flex items-center align-center h-5">
                         <input
                             id="terms"
                             type="checkbox"
