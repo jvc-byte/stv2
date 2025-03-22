@@ -1,0 +1,293 @@
+import Handlebars from "handlebars";
+
+// Define the template as a string
+const templateSource = `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Confirmation</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #a9f3f9;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      }
+      .header {
+        background: radial-gradient(
+          circle at top right,
+          #0d7533,
+          #08553c,
+          #065f46,
+          #105529,
+          #054934,
+          #024e39
+        );
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+      .content {
+        padding: 20px;
+      }
+      .footer {
+        background: radial-gradient(
+          circle at top right,
+          #4ade80,
+          #056849,
+          #065f46,
+          #105529,
+          #036546,
+          #09b887
+        );
+        padding: 15px;
+        text-align: center;
+        font-size: 12px;
+        color: #e9e9e9;
+      }
+      .section {
+        margin-bottom: 25px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .section-header {
+        background-color: #f0f0f0;
+        padding: 10px 15px;
+        font-weight: bold;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .section-content {
+        padding: 15px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td {
+        padding: 8px;
+        vertical-align: top;
+      }
+      .label {
+        font-weight: 600;
+        width: 40%;
+        color: #555;
+      }
+      .value {
+        width: 60%;
+      }
+      .monospace {
+        font-family: monospace;
+      }
+      .cta-button {
+        display: inline-block;
+        background-color: #1d7b40;
+        color: white;
+        padding: 10px 90px;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-top: 15px;
+        font-weight: bold;
+      }
+      .view-tx-btn {
+        display: inline-block;
+        background-color: #1b8743;
+        color: white;
+        padding: 5px 50px;
+        text-decoration: none;
+        border-radius: 6px;
+        margin-top: 15px;
+        font-weight: 400;
+      }
+      .hash {
+        word-break: break-all;
+        font-size: 0.9em;
+        font-family: monospace;
+      }
+      .summary-row {
+        font-weight: bold;
+        border-top: 1px solid #e0e0e0;
+        padding-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img
+          src="https://raw.githubusercontent.com/jvc-byte/sealed-trust/refs/heads/main/public/images/logo.png"
+          alt="SealedTrust Logo"
+          width="335"
+          height="120"
+          srcset=""
+        />
+      </div>
+
+      <div class="content">
+        <p>Hello <strong>{{receiverEmail}}</strong>,</p>
+        <p>
+          You have a pending transaction for the escrow titled
+          <strong>{{escrowTitle}}</strong>.
+        </p>
+        <p>
+          This transaction was initiated by
+          <strong>{{escrowInitiatorEmail}}</strong>.
+        </p>
+        <p>Details of the transaction are as follows:</p>
+
+        <div class="section">
+          <div class="section-header">Escrow Details</div>
+          <div class="section-content">
+            <table>
+              <tr>
+                <td class="label">Item Name:</td>
+                <td class="value">{{itemName}}</td>
+              </tr>
+              <tr>
+                <td class="label">Item Price:</td>
+                <td class="value monospace">{{itemPrice}}</td>
+              </tr>
+              <tr>
+                <td class="label">Escrow Title:</td>
+                <td class="value">{{escrowTitle}}</td>
+              </tr>
+              <tr>
+                <td class="label">Initiator Role:</td>
+                <td class="value">{{initiatorRole}}</td>
+              </tr>
+              <tr>
+                <td class="label">Currency:</td>
+                <td class="value">{{currency}}</td>
+              </tr>
+              <tr>
+                <td class="label">Inspection Period:</td>
+                <td class="value">{{inspectionPeriod}}</td>
+              </tr>
+              <tr>
+                <td class="label">Shipping Method:</td>
+                <td class="value">{{shippingMethod}}</td>
+              </tr>
+              <tr>
+                <td class="label">Shipping Fee Paid By:</td>
+                <td class="value">{{shippingFeePaidBy}}</td>
+              </tr>
+              <tr>
+                <td class="label">Item Category:</td>
+                <td class="value">{{itemCategory}}</td>
+              </tr>
+              <tr>
+                <td class="label">Item Description:</td>
+                <td class="value">{{itemDescription}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Transaction Summary</div>
+          <div class="section-content">
+            <table>
+              <tr>
+                <td class="label">Sub-Total:</td>
+                <td class="value">{{subTotal}}</td>
+              </tr>
+              <tr>
+                <td class="label">Escrow Fee Paid By {{escrowFeePaidBy}}</td>
+                <td class="value">{{escrowFee}}</td>
+              </tr>
+              <tr>
+                <td class="label">Buyer Price:</td>
+                <td class="value monospace">{{buyerPrice}}</td>
+              </tr>
+              <tr>
+                <td class="label">Seller Proceeds:</td>
+                <td class="value monospace">{{sellerProceeds}}</td>
+              </tr>
+            </table>
+            <p style="text-align: center; font-style: italic; color: #777">
+              All prices are in {{currency}}. Taxes may apply.
+            </p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Transaction Receipt</div>
+          <div class="section-content">
+            <table>
+              <tr>
+                <td class="label">Transaction Hash:</td>
+                <td class="value hash">{{transactionHash}}</td>
+              </tr>
+              <tr>
+                <td class="label">Chain ID:</td>
+                <td class="value">{{chainId}}</td>
+              </tr>
+              <tr>
+                <td class="label">Chain Name:</td>
+                <td class="value">{{chainName}}</td>
+              </tr>
+              <tr>
+                <td class="label">Transaction Status:</td>
+                <td class="value">{{transactionStatus}}</td>
+              </tr>
+              <tr>
+                <td class="label">Block Number:</td>
+                <td class="value">{{blockNumber}}</td>
+              </tr>
+              <tr>
+                <td class="label">Timestamp:</td>
+                <td class="value">{{timestamp}}</td>
+              </tr>
+              <tr>
+                <td class="label">Method:</td>
+                <td class="value monospace">{{method}}</td>
+              </tr>
+              <tr>
+                <td class="label">Initiator Address:</td>
+                <td class="value hash">{{initiatorAddress}}</td>
+              </tr>
+              <tr>
+                <td class="label">Client ID:</td>
+                <td class="value hash">{{clientId}}</td>
+              </tr>
+            </table>
+            <div style="text-align: center">
+              <a href="{{blockExplorerUrl}}" class="view-tx-btn">More Details</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center">
+          <a href="{{blockExplorerUrl}}" class="cta-button">Review and Agree</a>
+        </div>
+
+        <p>Please confirm the transaction at your earliest convenience.</p>
+        <p>Best regards, <br>SealedTrust Team</p>
+      </div>
+
+      <div class="footer">
+        <p>&copy; 2025 Your Escrow Service. All rights reserved.</p>
+        <p>This is an automated email. Please do not reply.</p>
+      </div>
+    </div>
+  </body>
+</html>
+`;
+
+// Compile the template
+const template = Handlebars.compile(templateSource);
+
+// Export the compiled template
+export default template;

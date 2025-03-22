@@ -89,7 +89,7 @@ const EscrowDetails = () => {
         setIsSendingEmail(true);
 
         try {
-            const apiUrl = process.env.EMAIL_END_POINT_URL || "http://localhost:5000/send-email";
+            const apiUrl = process.env.EMAIL_END_POINT_URL || "api/email/sendEmail/";
 
             const response = await fetch(apiUrl, {
                 method: 'POST',
