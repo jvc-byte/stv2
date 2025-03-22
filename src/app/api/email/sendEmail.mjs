@@ -30,7 +30,7 @@ const app = express();
 app.use(cors());
 app.use(json());
 
-app.post('/send-email', async (req, res) => {
+app.post('https://stv2.vercel.app/api/email/send-email', async (req, res) => {
   try {
     const { email, transactionDetails } = req.body;
 
