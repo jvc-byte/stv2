@@ -1,3 +1,4 @@
+'use client'
 import TransactionTable from "../components/dashboard/transactions/TransactionTable";
 // import { isLoggedIn } from "../api/auth/auth";
 // import { redirect } from "next/navigation";
@@ -11,7 +12,7 @@ const navLinks = [
 ]
 
 
-const Dash = async () => {
+function Dash() {
     // if (!(await isLoggedIn())) {
     //     redirect("/")
     // }

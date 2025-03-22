@@ -1,15 +1,44 @@
 "use client";
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useActiveAccount, useProfiles, } from 'thirdweb/react';
+import { client } from '@/lib/client';
+
 
 const EscrowDetails = () => {
+    const account = useActiveAccount();
     const [countryCode, setCountryCode] = useState('US');
     const [email, setEmail] = useState('');
     const [agreeToTerms, setAgreeToTerms] = useState(false);
     const [isSendingEmail, setIsSendingEmail] = useState(false);
     const [emailSent, setEmailSent] = useState(false);
 
+    const { data: profiles } = useProfiles({
+        client,
+    });
+
     const searchParams = useSearchParams();
+
+    // Function to calculate escrow fee
+    function escrowFee(subTotal: number) {
+        const subTotalValue = parseFloat(subTotal.toString());
+        const escrowFeeValue = subTotalValue * 0.01;
+        return escrowFeeValue.toFixed(2);
+    }
+
+    // Retrieve and calculate values before constructing transactionDetails
+    const subTotal = parseFloat(searchParams.get('subTotal') || '0');
+    const escrowFeeValue = escrowFee(subTotal);
+    const escrowFeePaidBy = searchParams.get('escrowFeePaidBy') || 'Buyer';
+    let buyerPrice = parseFloat(searchParams.get('subTotal') || '0');
+    let sellerProceeds = parseFloat(searchParams.get('subTotal') || '0');
+
+    // Deduct escrow fee from buyer or seller based on escrowFeePaidBy
+    if (escrowFeePaidBy === 'Buyer') {
+        buyerPrice = buyerPrice + parseFloat(escrowFeeValue);
+    } else if (escrowFeePaidBy === 'Seller') {
+        sellerProceeds = sellerProceeds - parseFloat(escrowFeeValue);
+    }
 
     // Retrieve transaction details from query parameters
     const transactionDetails = {
@@ -32,12 +61,15 @@ const EscrowDetails = () => {
         blockNumber: searchParams.get('blockNumber') || 'N/A',
         timestamp: searchParams.get('timestamp') || 'N/A',
         method: searchParams.get('method') || 'N/A',
-        initiatorAddress: searchParams.get('initiatorAddress') || 'N/A',
+        initiatorAddress: (account?.address)?.toString() || 'N/A',
         clientId: searchParams.get('clientId') || 'N/A',
-        subTotal: searchParams.get('subTotal') || 'N/A',
-        escrowFeePaidBy: searchParams.get('escrowFeePaidBy') || 'N/A',
-        buyerPrice: searchParams.get('buyerPrice') || 'N/A',
-        sellerProceeds: searchParams.get('sellerProceeds') || 'N/A',
+        subTotal: subTotal.toFixed(2),
+        escrowFeePaidBy: escrowFeePaidBy,
+        buyerPrice: buyerPrice.toFixed(2),
+        sellerProceeds: sellerProceeds.toFixed(2),
+        escrowFee: escrowFeeValue,
+        receiverEmail: email || 'N/A',
+        escrowInitiatorEmail: profiles?.[0]?.details?.email || 'N/A',
     };
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,24 +89,31 @@ const EscrowDetails = () => {
         setIsSendingEmail(true);
 
         try {
-            const response = await fetch('http://localhost:5000/send-email', {
+            const apiUrl = process.env.EMAIL_END_POINT_URL || "http://localhost:5000/send-email";
+
+            const response = await fetch(apiUrl, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify({ email, transactionDetails }),
             });
 
+            // Check if the response is OK
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Server error: ${response.status} - ${errorText}`);
+            }
+
             const data = await response.json();
+
             if (data.success) {
                 setEmailSent(true);
-                alert('Transaction details sent to your email!');
+                alert('Transaction details sent successfully.');
             } else {
-                alert('Failed to send email. Please try again.');
+                alert(`Failed to send email: ${data.message || 'Please try again.'}`);
             }
         } catch (error) {
             console.error('Error sending email:', error);
-            alert('An error occurred while sending the email.');
+            alert(`An error occurred: ${error || 'Unknown error'}`);
         } finally {
             setIsSendingEmail(false);
         }
@@ -115,35 +154,21 @@ const EscrowDetails = () => {
                     <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">
                         Escrow Details
                     </h1>
-                    <div className="col-span-6 border rounded-md shadow-md sm:p-2">
+                    <div className="col-span-6 border rounded-md shadow-md sm:p-2 sm:mb-1">
                         <table className="w-full">
                             <tbody>
-                                <tr>
-                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Transaction Hash:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.transactionHash, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.transactionHash)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
-                                    </td>
-                                </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Item Name:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.itemName}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Item Price:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.itemPrice}</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 ">{transactionDetails.itemPrice}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0">
+                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0 sm:mb-1">
                         <table className="w-full">
                             <tbody>
                                 <tr>
@@ -152,7 +177,7 @@ const EscrowDetails = () => {
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Initiator Role:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.initiatorRole}</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 ">{transactionDetails.initiatorRole}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Currency:</td>
@@ -165,7 +190,7 @@ const EscrowDetails = () => {
                             </tbody>
                         </table>
                     </div>
-                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0">
+                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0 sm:mb-1">
                         <table className="w-full">
                             <tbody>
                                 <tr>
@@ -174,7 +199,7 @@ const EscrowDetails = () => {
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Shipping Fee Paid By:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.shippingFeePaidBy}</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 ">{transactionDetails.shippingFeePaidBy}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Item Category:</td>
@@ -189,12 +214,44 @@ const EscrowDetails = () => {
                     </div>
                 </div>
 
+                {/* Transaction Summary Section */}
+                <div className="sm:grid-cols-6 mt-4">
+                    <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">
+                        Transaction Summary
+                    </h1>
+                    <div className="col-span-6 border rounded-md shadow-md p-2 sm:mb-1">
+                        <table className="w-full">
+                            <tbody>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Sub-Total:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.subTotal}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Escrow Fee Paid By {transactionDetails.escrowFeePaidBy}:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.escrowFee}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Buyer Price:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 ">{transactionDetails.buyerPrice}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Seller Proceeds:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 ">{transactionDetails.sellerProceeds}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h2 className="text-center font-light italic text-gray-500 my-2 mt-4 col-span-6">
+                            All prices are in {transactionDetails.currency}. Taxes may apply.
+                        </h2>
+                    </div>
+                </div>
+
                 {/* Transaction Receipt Section */}
                 <div className="sm:grid-cols-6 mt-4">
                     <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">
                         Transaction Receipt
                     </h1>
-                    <div className="col-span-6 border rounded-md shadow-md p-2">
+                    <div className="col-span-6 border rounded-md shadow-md p-2 sm:mb-1">
                         <table className="w-full">
                             <tbody>
                                 <tr>
@@ -211,10 +268,24 @@ const EscrowDetails = () => {
                                         </button>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Transaction Hash:</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 flex">
+                                        <span className="pr-20 truncate">
+                                            {truncateText(transactionDetails.transactionHash, 10)}
+                                        </span>
+                                        <button
+                                            onClick={() => copyToClipboard(transactionDetails.transactionHash)}
+                                            className="ml-4 text-blue-500 hover:text-blue-700"
+                                        >
+                                            {copied ? 'Copied!' : 'Copy'}
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0">
+                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0 sm:mb-1">
                         <table className="w-full">
                             <tbody>
                                 <tr>
@@ -223,7 +294,7 @@ const EscrowDetails = () => {
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Chain Name:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.chainName}</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 ">{transactionDetails.chainName}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Transaction Status:</td>
@@ -236,7 +307,7 @@ const EscrowDetails = () => {
                             </tbody>
                         </table>
                     </div>
-                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0">
+                    <div className="col-span-6 sm:col-span-3 border rounded-md shadow-md p-2 mt-4 sm:mt-0 sm:mb-1">
                         <table className="w-full">
                             <tbody>
                                 <tr>
@@ -255,7 +326,7 @@ const EscrowDetails = () => {
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Method:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.method}</td>
+                                    <td className="p-2 w-1/2 sm:w-3/4 ">{transactionDetails.method}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Initiator Address:</td>
@@ -277,38 +348,6 @@ const EscrowDetails = () => {
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-
-                {/* Transaction Summary Section */}
-                <div className="sm:grid-cols-6 mt-4">
-                    <h1 className="text-center sm:text-justify text-lg font-bold text-gray-700 my-2 mt-8 col-span-6">
-                        Transaction Summary
-                    </h1>
-                    <div className="col-span-6 border rounded-md shadow-md p-2">
-                        <table className="w-full">
-                            <tbody>
-                                <tr>
-                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Sub-Total:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.subTotal}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Escrow Fee Paid By:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4">{transactionDetails.escrowFeePaidBy}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Buyer Price:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.buyerPrice}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-2 font-semibold w-1/2 sm:w-1/4">Seller Proceeds:</td>
-                                    <td className="p-2 w-1/2 sm:w-3/4 font-mono">{transactionDetails.sellerProceeds}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <h2 className="text-center font-light italic text-gray-500 my-2 mt-4 col-span-6">
-                            All prices are in {transactionDetails.currency}. Taxes may apply.
-                        </h2>
                     </div>
                 </div>
 

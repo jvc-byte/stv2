@@ -83,17 +83,18 @@ export default function CreateEscrow() {
                                 shippingFeePaidBy: formData.shippingFeePaidBy,
                                 transactionHash: receipt.transactionHash,
                                 blockExplorerUrl: `https://base-sepolia.blockscout.com//tx/${receipt.transactionHash}`,
-                                chainId: receipt.chain.toString(),
+                                chainId: receipt.chain?.id?.toString() || 'N/A',
+                                chainName: receipt.chain?.name?.toString() || 'N/A',
                                 transactionStatus: 'Success',
-                                blockNumber: '151465165',
+                                blockNumber: '23417765',
                                 timestamp: new Date().toLocaleString(),
                                 method: 'createEscrow',
                                 initiatorAddress: 'receipt.from',
                                 clientId: receipt.client.clientId.toString(), 
                                 subTotal: formData.price.toString(),
                                 escrowFeePaidBy: formData.role,
-                                buyerPrice: formData.price.toString(),
-                                sellerProceeds: (formData.price * 0.95).toString(), // Example calculation
+                                // buyerPrice: formData.price.toString(),
+                                // sellerProceeds: (formData.price * 0.95).toString(), // Example calculation
                             }).toString();
 
                             // Redirect to transaction-details page with query parameters
