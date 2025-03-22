@@ -69,7 +69,7 @@ const EscrowDetails = () => {
         sellerProceeds: sellerProceeds.toFixed(2),
         escrowFee: escrowFeeValue,
         receiverEmail: email || 'N/A',
-        escrowInitiatorEmail: profiles?.[0]?.details?.email || 'N/A',
+        escrowInitiatorEmail: profiles?.[0]?.details?.email || 'a user',
     };
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +89,7 @@ const EscrowDetails = () => {
         setIsSendingEmail(true);
 
         try {
-            const apiUrl = process.env.EMAIL_END_POINT_URL || "api/email/sendEmail/";
+            const apiUrl = process.env.EMAIL_END_POINT_URL || "../../api/email/sendEmail/";
 
             const response = await fetch(apiUrl, {
                 method: 'POST',
