@@ -4,7 +4,7 @@ import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { baseSepolia } from "thirdweb/chains";
 import { CREATE_ESCROW_CONTRACT_ADDRESS } from "@/lib/contracts";
 import { useEffect, useState } from 'react';
-import { Escrow } from "../interfaces";
+import { Escrow } from "../../types";
 
 export const FetchEscrowsData = () => {
     const contract = getContract({ client, chain: baseSepolia, address: CREATE_ESCROW_CONTRACT_ADDRESS });

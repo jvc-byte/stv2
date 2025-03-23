@@ -2,7 +2,7 @@ import { client } from "@/lib/client";
 import { getContract, prepareContractCall } from "thirdweb";
 import { baseSepolia } from "thirdweb/chains";
 import { CREATE_ESCROW_CONTRACT_ADDRESS } from "@/lib/contracts";
-import { formDataType } from "../types";
+import { formDataType } from "../../types";
 
 export const createEscrowTransaction = async (formData: formDataType) => {
     const contract = getContract({

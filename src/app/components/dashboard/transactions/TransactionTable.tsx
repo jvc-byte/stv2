@@ -1,5 +1,5 @@
 'use client'
-import { FetchEscrowsData } from '../../../dashboard/create-escrow/api/FetchEscrowData';
+import { FetchEscrowsData } from '../../../api/dashboard/create-escrow/FetchEscrowData';
 import TransactionStatus from "./TransactionStatus";
 
 export default function TransactionTable() {

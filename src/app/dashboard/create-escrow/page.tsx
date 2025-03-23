@@ -2,7 +2,7 @@
 import { useCallback, useState } from "react";
 import { useSendTransaction } from "thirdweb/react";
 import { useRouter } from "next/navigation";
-import { createEscrowTransaction } from "./api/CreateEscrow";
+import { createEscrowTransaction } from "../../api/dashboard/create-escrow/CreateEscrow";
 import CurrencyDropdown from "@/app/components/dashboard/transactions/CurrencyDropdown";
 import ItemCategoryDropdown from "@/app/components/dashboard/transactions/ItemCategory";
 import RoleDropdown from "@/app/components/dashboard/transactions/RoleDropdown";

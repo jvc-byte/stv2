@@ -415,7 +415,7 @@ const EscrowDetails = () => {
                         disabled={isSendingEmail || emailSent}
                         className="bg-teal-500 text-white btn wide px-6 py-2 rounded-md hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
-                        {isSendingEmail ? 'Sending...' : emailSent ? 'Email Sent!' : 'Email Transaction Details To Buyer'}
+                        {isSendingEmail ? 'Sending...' : emailSent ? 'Email Sent!' : 'Email Transaction Details To Seller'}
                     </button>
                 </div>
             </div>
