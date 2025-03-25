@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState } from "react";
-import { useSendTransaction } from "thirdweb/react";
+import { useActiveAccount, useSendTransaction } from "thirdweb/react";
 import { useRouter } from "next/navigation";
 import { createEscrowTransaction } from "../../api/dashboard/create-escrow/CreateEscrow";
 import CurrencyDropdown from "@/app/components/dashboard/transactions/CurrencyDropdown";
@@ -10,6 +10,7 @@ import ShippingFeePaidBy from "@/app/components/dashboard/transactions/ShippingF
 import ShippingMethodDropdown from "@/app/components/dashboard/transactions/ShippingMethodDropdown";
 
 export default function CreateEscrow() {
+    const account = useActiveAccount();
     const [formData, setFormData] = useState({
         escrowTitle: '',
         role: '',
@@ -65,7 +66,7 @@ export default function CreateEscrow() {
                     const transaction = await createEscrowTransaction(formData);
 
                     sendTransaction(transaction, {
-                        onSuccess: (receipt) => {
+                        onSuccess: async (receipt) => {
                             console.log("Transaction successful! Receipt:", receipt);
                             alert('Escrow created successfully!');
 
@@ -89,13 +90,65 @@ export default function CreateEscrow() {
                                 blockNumber: '23417765',
                                 timestamp: new Date().toLocaleString(),
                                 method: 'createEscrow',
-                                initiatorAddress: 'receipt.from',
-                                clientId: receipt.client.clientId.toString(), 
+                                initiatorAddress: (account?.address)?.toString() || 'Unknown',
+                                clientId: receipt.client.clientId.toString(),
                                 subTotal: formData.price.toString(),
                                 escrowFeePaidBy: formData.role,
                                 // buyerPrice: formData.price.toString(),
                                 // sellerProceeds: (formData.price * 0.95).toString(), // Example calculation
                             }).toString();
+
+                            // Inside the onSuccess callback of sendTransaction
+                            const saveTransactionDetails = async () => {
+                                try {
+                                    // Create the transaction details object
+                                    const transactionDetails = {
+                                        transaction_hash: receipt.transactionHash,
+                                        item_name: formData.itemName,
+                                        item_price: formData.price.toString(),
+                                        escrow_title: formData.escrowTitle,
+                                        initiator_role: formData.role,
+                                        currency: formData.currency,
+                                        inspection_period: formData.inspectionPeriod.toString(),
+                                        shipping_method: formData.shippingMethod,
+                                        shipping_fee_paid_by: formData.shippingFeePaidBy,
+                                        item_category: formData.itemCategory,
+                                        item_description: formData.itemDescription,
+                                        block_explorer_url: `https://base-sepolia.blockscout.com/tx/${receipt.transactionHash}`,
+                                        chain_id: receipt.chain?.id?.toString() || 'N/A',
+                                        chain_name: receipt.chain?.name?.toString() || 'N/A',
+                                        transaction_status: 'Success',
+                                        block_number: '23417765', // You should get this from receipt
+                                        timestamp: new Date().toISOString(),
+                                        method: 'createEscrow',
+                                        initiator_address: (account?.address)?.toString() || 'Unknown',
+                                        client_id: receipt.client.clientId.toString()
+                                    };
+
+                                    // Get user email (you'll need to add this to your form or get it from user context)
+                                    const email = 'user@example.com'; // Replace with actual user email
+
+                                    // Send data to your API endpoint
+                                    const response = await fetch('/api/dashboard/create-escrow', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ email, transactionDetails })
+                                    });
+
+                                    if (!response.ok) {
+                                        throw new Error('Failed to save transaction details');
+                                    }
+
+                                    const data = await response.json();
+                                    console.log('Transaction details saved:', data);
+                                } catch (error) {
+                                    console.error('Error saving transaction details:', error);
+                                    // Don't alert here - the transaction was successful, just the saving failed
+                                }
+                            };
+
+                            // Call the function
+                            await saveTransactionDetails();
 
                             // Redirect to transaction-details page with query parameters
                             router.push(`/dashboard/transaction-details?${queryParams}`);
