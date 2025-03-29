@@ -55,6 +55,7 @@ const EscrowDetails = () => {
         itemDescription: searchParams.get('itemDescription') || 'N/A',
         transactionHash: searchParams.get('transactionHash') || 'N/A',
         blockExplorerUrl: searchParams.get('blockExplorerUrl') || 'N/A',
+        viewDetailsUrl: searchParams.get('viewDetailsUrl' )|| 'N/A',
         chainId: searchParams.get('chainId') || 'N/A',
         chainName: searchParams.get('chainName') || 'N/A',
         transactionStatus: searchParams.get('transactionStatus') || 'N/A',

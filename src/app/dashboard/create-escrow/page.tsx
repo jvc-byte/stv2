@@ -63,7 +63,7 @@ export default function CreateEscrow() {
 
             if (validateForm()) {
                 try {
-                    const transaction = await createEscrowTransaction(formData);
+                    const transaction = await createEscrowTransaction({...formData, price: Math.round(formData.price)});
 
                     sendTransaction(transaction, {
                         onSuccess: async (receipt) => {
@@ -84,6 +84,7 @@ export default function CreateEscrow() {
                                 shippingFeePaidBy: formData.shippingFeePaidBy,
                                 transactionHash: receipt.transactionHash,
                                 blockExplorerUrl: `https://base-sepolia.blockscout.com//tx/${receipt.transactionHash}`,
+                                viewDetailsUrl: `https://stv2.vercel.app/dashboard/transaction-details/${receipt.transactionHash}`,
                                 chainId: receipt.chain?.id?.toString() || 'N/A',
                                 chainName: receipt.chain?.name?.toString() || 'N/A',
                                 transactionStatus: 'Success',
@@ -166,7 +167,7 @@ export default function CreateEscrow() {
                 console.log('Form has errors, please fix them.');
             }
         },
-        [formData, sendTransaction, validateForm, router]
+        [validateForm, formData, sendTransaction, account?.address, router]
     );
 
     return (
