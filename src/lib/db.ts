@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-let pool;
+let pool: Pool;
 
 // Check if DATABASE_URL environment variable exists (for production)
 if (process.env.DATABASE_URL) {
