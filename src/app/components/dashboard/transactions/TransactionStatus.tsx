@@ -55,7 +55,7 @@ export default function TransactionStatus({ status }: { status: string }) {
                 },
             )}
         >
-            {status === '0' ? (<> Not Initialized <NoSymbolIcon className="ml-1 w-4 text-white-800" /></>) : null}
+            {status === '0' ? (<> Escrow Initialized <NoSymbolIcon className="ml-1 w-4 text-white-800" /></>) : null}
             {status === '1' ? (<> Seller Reviewing <ClockIcon className="ml-1 w-4 text-white-800" /></>) : null}
             {status === '2' ? (<> Awaiting Payment <ClockIcon className="ml-1 w-4 text-white-800" /></>) : null}
             {status === '3' ? (<> Payment Processing <ClockIcon className="ml-1 w-4 text-white-800" /></>) : null}

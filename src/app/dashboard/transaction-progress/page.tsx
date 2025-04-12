@@ -15,7 +15,7 @@ export default function TransactionProgress() {
     const searchParams = useSearchParams();
     const tx_id = searchParams.get('tx_id');
     const [status, setStatus] = useState<TransactionProgressState>({
-        status: '1',
+        status: '0',
         currentStep: 1,
         totalSteps: 7,
         lastUpdated: new Date().toISOString()
