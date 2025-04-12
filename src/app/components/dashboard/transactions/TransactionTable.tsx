@@ -2,6 +2,7 @@
 import { FetchEscrowsData } from '../../../api/dashboard/create-escrow/FetchEscrowData';
 import TransactionStatus from "./TransactionStatus";
 
+
 export default function TransactionTable() {
     const { escrowsData, isPending, account } = FetchEscrowsData();
 

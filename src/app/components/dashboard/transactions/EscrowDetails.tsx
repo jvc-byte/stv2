@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation';
 import { useActiveAccount, useProfiles, } from 'thirdweb/react';
 import { client } from '@/lib/client';
 
-
 const EscrowDetails = () => {
     const account = useActiveAccount();
     const [countryCode, setCountryCode] = useState('US');
@@ -109,6 +108,8 @@ const EscrowDetails = () => {
             if (data.success) {
                 setEmailSent(true);
                 alert('Transaction details sent successfully.');
+                // Navigate to transaction progress page
+                window.location.href = '/dashboard/transaction-progress';
             } else {
                 alert(`Failed to send email: ${data.message || 'Please try again.'}`);
             }
