@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import TransactionStatus from '@/app/components/dashboard/transactions/TransactionStatus';
@@ -11,13 +12,13 @@ interface TransactionProgressState {
     statusMessage?: string;
 }
 
-export default function TransactionProgress() {
+function TransactionProgressContent() {
     const searchParams = useSearchParams();
     const tx_id = searchParams.get('tx_id');
     const [status, setStatus] = useState<TransactionProgressState>({
         status: '0',
         currentStep: 1,
-        totalSteps: 7,
+        totalSteps: 8,
         lastUpdated: new Date().toISOString()
     });
     const [error, setError] = useState<string | null>(null);
@@ -37,35 +38,36 @@ export default function TransactionProgress() {
 
                 const data = await response.json();
                 
-                // Map the transaction status to step number
                 let currentStep = 1;
                 switch (data.status) {
-                    case '0': // Not Initialized
+                    case '0': // Escrow Initialized
                         currentStep = 1;
                         break;
-                    case '1': // Awaiting Payment
+                    case '1': // Seller Reviewing
                         currentStep = 2;
                         break;
-                    case '2': // Paid
+                    case '2': // Awaiting Payment
                         currentStep = 3;
                         break;
-                    case '3': // Delivering
+                    case '3': // Payment Processing
                         currentStep = 4;
                         break;
-                    case '4': // Delivered
+                    case '4': // Payment Completed
                         currentStep = 5;
                         break;
-                    case '5': // Buyer Confirming
+                    case '5': // Delivering
                         currentStep = 6;
                         break;
-                    case '6': // Buyer Approved
-                    case '14': // Completed
+                    case '6': // Buyer Confirming
                         currentStep = 7;
+                        break;
+                    case '7': // Buyer Approved
+                    case '14': // Completed
+                        currentStep = 8;
                         break;
                     case '11': // Cancelled
                     case '16': // Awaiting modification
                     case '17': // Failed
-                        // Instead of throwing error, set currentStep to 1 and keep the status
                         currentStep = 1;
                         break;
                 }
@@ -73,7 +75,7 @@ export default function TransactionProgress() {
                 setStatus({
                     status: data.status,
                     currentStep,
-                    totalSteps: 7,
+                    totalSteps: 8,
                     lastUpdated: new Date().toISOString(),
                     statusMessage: data.status_message
                 });
@@ -82,7 +84,6 @@ export default function TransactionProgress() {
             }
         };
 
-        // Fetch immediately and then every 30 seconds
         fetchTransactionStatus();
         const interval = setInterval(fetchTransactionStatus, 30000);
 
@@ -150,16 +151,13 @@ export default function TransactionProgress() {
 
             {/* Progress Steps */}
             <div className="relative">
-                {/* Progress Line */}
                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
                     <div className="hidden sm:block h-0.5 w-full bg-gray-200"></div>
                 </div>
                 
-                {/* Steps List */}
                 <ul className="relative flex flex-col sm:flex-row justify-evenly gap-8 sm:gap-4">
                     {steps.map((step, index) => (
                         <li key={step.id} className={`flex ${index === 0 ? 'sm:flex-col' : 'flex-row sm:flex-col'} items-start sm:items-center gap-4 sm:gap-0`}>
-                            {/* Step Circle */}
                             <div className={`relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full
                                 ${step.id < status.currentStep ? 'bg-teal-600' :
                                 step.id === status.currentStep ? 'bg-teal-600 ring-4 ring-teal-100' :
@@ -175,7 +173,6 @@ export default function TransactionProgress() {
                                 )}
                             </div>
                             
-                            {/* Step Content */}
                             <div className="sm:mt-2 min-w-0 sm:min-w-[120px] sm:text-center flex-1 sm:flex-none">
                                 <div className="text-sm font-medium text-gray-900">{step.name}</div>
                                 <div className="text-xs text-gray-500 sm:mt-1">{step.description}</div>
@@ -195,5 +192,13 @@ export default function TransactionProgress() {
                 </button>
             </div>
         </div>
+    );
+}
+
+export default function TransactionProgress() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <TransactionProgressContent />
+        </Suspense>
     );
 }
