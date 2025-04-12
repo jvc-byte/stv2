@@ -110,7 +110,7 @@ const TransactionDetails = () => {
 
                     <div className="sm:grid-cols-6 mt-4">
                         <div className="col-span-6 border rounded-md shadow-md p-2">
-                            <p className="text-center text-gray-500">No transaction details found</p>
+                            <p className="text-center text-gray-500">Chill we&apos;ll get your Transaction soon</p>
                         </div>
                     </div>
                 </div>
