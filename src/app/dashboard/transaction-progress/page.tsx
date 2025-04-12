@@ -1,31 +1,132 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import TransactionStatus from '@/app/components/dashboard/transactions/TransactionStatus';
 
 interface TransactionProgressState {
-    status: string; // Status code as string ('0' to '18')
+    status: string;
     currentStep: number;
     totalSteps: number;
     lastUpdated: string;
+    statusMessage?: string;
 }
 
 export default function TransactionProgress() {
-    const [status] = useState<TransactionProgressState>({
-        status: '1', // Starting with 'Awaiting Payment'
+    const searchParams = useSearchParams();
+    const tx_id = searchParams.get('tx_id');
+    const [status, setStatus] = useState<TransactionProgressState>({
+        status: '1',
         currentStep: 1,
         totalSteps: 7,
         lastUpdated: new Date().toISOString()
     });
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!tx_id) {
+            setError('No transaction ID provided');
+            return;
+        }
+
+        const fetchTransactionStatus = async () => {
+            try {
+                const response = await fetch(`/api/dashboard/transaction-details/${tx_id}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch transaction status');
+                }
+
+                const data = await response.json();
+                
+                // Map the transaction status to step number
+                let currentStep = 1;
+                switch (data.status) {
+                    case '0': // Not Initialized
+                        currentStep = 1;
+                        break;
+                    case '1': // Awaiting Payment
+                        currentStep = 2;
+                        break;
+                    case '2': // Paid
+                        currentStep = 3;
+                        break;
+                    case '3': // Delivering
+                        currentStep = 4;
+                        break;
+                    case '4': // Delivered
+                        currentStep = 5;
+                        break;
+                    case '5': // Buyer Confirming
+                        currentStep = 6;
+                        break;
+                    case '6': // Buyer Approved
+                    case '14': // Completed
+                        currentStep = 7;
+                        break;
+                    case '11': // Cancelled
+                    case '16': // Awaiting modification
+                    case '17': // Failed
+                        // Instead of throwing error, set currentStep to 1 and keep the status
+                        currentStep = 1;
+                        break;
+                }
+
+                setStatus({
+                    status: data.status,
+                    currentStep,
+                    totalSteps: 7,
+                    lastUpdated: new Date().toISOString(),
+                    statusMessage: data.status_message
+                });
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to fetch transaction status');
+            }
+        };
+
+        // Fetch immediately and then every 30 seconds
+        fetchTransactionStatus();
+        const interval = setInterval(fetchTransactionStatus, 30000);
+
+        return () => clearInterval(interval);
+    }, [tx_id]);
 
     const steps = [
         { id: 1, name: 'Transaction Created', description: 'Transaction details have been sent to the seller' },
         { id: 2, name: 'Seller Review', description: 'Waiting for seller to review and accept the transaction' },
-        { id: 3, name: 'Payment Processing', description: 'Processing payment and setting up escrow' },
-        { id: 4, name: 'Payment Completed', description: 'Payment has been completed successfully' },
-        { id: 5, name: 'Awaiting Delivery', description: 'Waiting for seller to deliver the item' },
-        { id: 6, name: 'Delivery Received', description: 'Delivery has been received successfully' },
-        { id: 7, name: 'Transaction Complete', description: 'Transaction has been completed successfully' }
+        { id: 3, name: 'Payment', description: 'Waiting for buyer to make payment' },
+        { id: 4, name: 'Payment Processing', description: 'Processing payment and setting up escrow' },
+        { id: 5, name: 'Payment Completed', description: 'Payment has been completed successfully' },
+        { id: 6, name: 'Awaiting Delivery', description: 'Waiting for seller to deliver the item' },
+        { id: 7, name: 'Delivery Received', description: 'Delivery has been received successfully' },
+        { id: 8, name: 'Transaction Complete', description: 'Transaction has been completed successfully' }
     ];
+
+    if (error) {
+        return (
+            <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-8">
+                    <div className="flex">
+                        <div className="flex-shrink-0">
+                            <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                        </div>
+                        <div className="ml-3">
+                            <h3 className="text-sm font-medium text-red-800">Transaction Error</h3>
+                            <div className="mt-2 text-sm text-red-700">{error}</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex justify-center">
+                    <button
+                        onClick={() => window.location.href = '/dashboard'}
+                        className="bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors"
+                    >
+                        Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
@@ -37,6 +138,9 @@ export default function TransactionProgress() {
                     <div>
                         <h2 className="text-base sm:text-lg font-semibold text-gray-900">Current Status</h2>
                         <p className="text-xs sm:text-sm text-gray-500">Last updated: {new Date(status.lastUpdated).toLocaleString()}</p>
+                        {status.statusMessage && (
+                            <p className="text-sm text-gray-600 mt-1">{status.statusMessage}</p>
+                        )}
                     </div>
                     <div className="self-start sm:self-center">
                         <TransactionStatus status={status.status} />
@@ -48,7 +152,7 @@ export default function TransactionProgress() {
             <div className="relative">
                 {/* Progress Line */}
                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className=" hidden sm:block h-0.5 w-full bg-gray-200"></div>
+                    <div className="hidden sm:block h-0.5 w-full bg-gray-200"></div>
                 </div>
                 
                 {/* Steps List */}

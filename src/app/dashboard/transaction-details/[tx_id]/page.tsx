@@ -1,12 +1,15 @@
 'use client'
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { TransactionDetailsType } from '../../../api/types'
 
 const TransactionDetails = () => {
+    const router = useRouter();
     const [copied, setCopied] = useState(false);
     const params = useParams();
     const { tx_id } = params; // Get the transaction ID from the URL
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [updateError, setUpdateError] = useState<string | null>(null);
 
     const [transactionDetails, setTransactionDetails] = useState<TransactionDetailsType | null>(null);
     const [loading, setLoading] = useState(true);
@@ -68,36 +71,91 @@ const TransactionDetails = () => {
         return `${text.slice(0, maxLength)}...`;
     };
 
-    if (loading) {
-        <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md pb-8">
-            <div className="text-black flex flex-col">
-                <h1 className="text-center sm:text-justify text-2xl font-bold text-gray-700 my-2">
-                    Transaction Details
-                </h1>
+    const handleTransactionResponse = async (response: 'approve' | 'decline' | 'modify') => {
+        setIsUpdating(true);
+        setUpdateError(null);
 
-                <div className="sm:grid-cols-6 mt-4">
-                    <div className="col-span-6 border rounded-md shadow-md p-2">
-                        <p className="text-center text-gray-500">Loading...</p>
+        try {
+            let status;
+            let message;
+
+            switch (response) {
+                case 'approve':
+                    status = '2'; // Approved/Paid status
+                    message = 'Transaction approved by seller';
+                    break;
+                case 'decline':
+                    status = '11'; // Cancelled status
+                    message = 'Transaction declined by seller';
+                    break;
+                case 'modify':
+                    status = '16'; // Awaiting modification status
+                    message = 'Seller requested modifications';
+                    break;
+                default:
+                    throw new Error('Invalid response type');
+            }
+
+            const updateResponse = await fetch('/api/dashboard/transaction-details/update-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tx_id,
+                    status,
+                    message
+                }),
+            });
+
+            if (!updateResponse.ok) {
+                throw new Error('Failed to update transaction status');
+            }
+
+            // Redirect to progress page after successful update
+            router.push(`/dashboard/transaction-progress?tx_id=${tx_id}`);
+        } catch (error) {
+            console.error('Error updating transaction:', error);
+            setUpdateError(error instanceof Error ? error.message : 'Failed to update transaction');
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md pb-8">
+                <div className="text-black flex flex-col">
+                    <h1 className="text-center sm:text-justify text-2xl font-bold text-gray-700 my-2">
+                        Transaction Details
+                    </h1>
+
+                    <div className="sm:grid-cols-6 mt-4">
+                        <div className="col-span-6 border rounded-md shadow-md p-2">
+                            <p className="text-center text-gray-500">Loading...</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        );
     }
 
     if (error) {
-        <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md pb-8">
-            <div className="text-black flex flex-col">
-                <h1 className="text-center sm:text-justify text-2xl font-bold text-gray-700 my-2">
-                    Transaction Details
-                </h1>
+        return (
+            <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md pb-8">
+                <div className="text-black flex flex-col">
+                    <h1 className="text-center sm:text-justify text-2xl font-bold text-gray-700 my-2">
+                        Transaction Details
+                    </h1>
 
-                <div className="sm:grid-cols-6 mt-4">
-                    <div className="col-span-6 border rounded-md shadow-md p-2">
-                        <p className="text-center text-gray-500">Error: {error}</p>
+                    <div className="sm:grid-cols-6 mt-4">
+                        <div className="col-span-6 border rounded-md shadow-md p-2">
+                            <p className="text-center text-gray-500">Error: {error}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        );
     }
 
     if (!transactionDetails) {
@@ -345,8 +403,32 @@ const TransactionDetails = () => {
 
                 {/* Action Buttons */}
                 <div className="mt-4 flex flex-col sm:flex-row justify-center gap-4">
-                    <button className="bg-teal-500 text-white btn wide px-6 py-2 rounded-md hover:bg-teal-700">I DON&apos;T Agree to Transaction</button>
-                    <button className="bg-teal-500 text-white btn wide px-6 py-2 rounded-md hover:bg-teal-700">I Agree to Transaction</button>
+                    {updateError && (
+                        <div className="text-red-500 text-center mb-4">
+                            {updateError}
+                        </div>
+                    )}
+                    <button 
+                        onClick={() => handleTransactionResponse('decline')}
+                        disabled={isUpdating}
+                        className="bg-red-500 text-white btn wide px-6 py-2 rounded-md hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    >
+                        {isUpdating ? 'Processing...' : "I Don't Agree"}
+                    </button>
+                    <button
+                        onClick={() => handleTransactionResponse('modify')}
+                        disabled={isUpdating}
+                        className="bg-yellow-500 text-white btn wide px-6 py-2 rounded-md hover:bg-yellow-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    >
+                        {isUpdating ? 'Processing...' : 'Request Modifications'}
+                    </button>
+                    <button 
+                        onClick={() => handleTransactionResponse('approve')}
+                        disabled={isUpdating}
+                        className="bg-teal-500 text-white btn wide px-6 py-2 rounded-md hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    >
+                        {isUpdating ? 'Processing...' : 'I Agree'}
+                    </button>
                 </div>
             </div>
         </div>

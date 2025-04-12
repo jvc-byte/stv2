@@ -106,10 +106,10 @@ const EscrowDetails = () => {
             const data = await response.json();
 
             if (data.success) {
-                setEmailSent(true);
+            setEmailSent(true);
                 alert('Transaction details sent successfully.');
                 // Navigate to transaction progress page
-                window.location.href = '/dashboard/transaction-progress';
+                window.location.href = `/dashboard/transaction-progress?tx_id=${transactionDetails.transactionHash}`;
             } else {
                 alert(`Failed to send email: ${data.message || 'Please try again.'}`);
             }

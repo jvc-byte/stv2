@@ -35,36 +35,36 @@ export default function TransactionStatus({ status }: { status: string }) {
                 {
                     'bg-gray-500 text-white': status === '0',
                     'bg-orange-600 text-white': status === '1',
-                    'bg-green-500 text-white': status === '2',
+                    'bg-orange-500 text-white': status === '2',
                     'bg-cyan-500 text-white': status === '3',
                     'bg-yellow-600 text-white': status === '4',
-                    'bg-orange-500 text-white': status === '5',
+                    'bg-blue-500 text-white': status === '5',
                     'bg-green-600 text-white': status === '6',
                     'bg-orange-700 text-white': status === '7',
                     'bg-orange-400 text-white': status === '8',
                     'bg-red-600 text-white': status === '9',
                     'bg-blue-600 text-white': status === '10',
-                    'bg-yellow-500 text-white': status === '11',
+                    'bg-red-500 text-white': status === '11',
                     'bg-gray-400 text-white': status === '12',
                     'bg-green-400 text-white': status === '13',
                     'bg-purple-600 text-white': status === '14',
                     'bg-yellow-700 text-white': status === '15',
                     'bg-stone-500 text-white': status === '16',
-                    'bg-red-500 text-white': status === '17',
+                    'bg-red-500 text-gray-100': status === '17',
                     'bg-violet-500 text-white': status === '18',
                 },
             )}
         >
             {status === '0' ? (<> Not Initialized <NoSymbolIcon className="ml-1 w-4 text-white-800" /></>) : null}
-            {status === '1' ? (<> Awaiting Payment <ClockIcon className="ml-1 w-4 text-white-800" /></>) : null}
-            {status === '2' ? (<> Paid <CheckCircleIcon className="ml-1 w-4 text-white" /> </>) : null}
-            {status === '3' ? (<> Delivering <CircleStackIcon className="ml-1 w-4 text-white" /> </>) : null}
-            {status === '4' ? (<> Delivered <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
-            {status === '5' ? (<> Buyer Confirming <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
-            {status === '6' ? (<> Buyer Approved <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
-            {status === '7' ? (<> In Dispute <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
-            {status === '8' ? (<> Under Review <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
-            {status === '9' ? (<> In Dispute <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
+            {status === '1' ? (<> Seller Reviewing <ClockIcon className="ml-1 w-4 text-white-800" /></>) : null}
+            {status === '2' ? (<> Awaiting Payment <ClockIcon className="ml-1 w-4 text-white-800" /></>) : null}
+            {status === '3' ? (<> Payment Processing <ClockIcon className="ml-1 w-4 text-white-800" /></>) : null}
+            {status === '4' ? (<> Payment Completed <CheckCircleIcon className="ml-1 w-4 text-white" /> </>) : null}
+            {status === '5' ? (<> Delivering <CircleStackIcon className="ml-1 w-4 text-white" /> </>) : null}
+            {status === '6' ? (<> Buyer Confirming <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
+            {status === '7' ? (<> Buyer Approved <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
+            {status === '8' ? (<> In Dispute <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
+            {status === '9' ? (<> Under Review <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
             {status === '10' ? (<> Dispute Resolved <ArrowUturnLeftIcon className="ml-1 w-4 text-white" /> </>) : null}
             {status === '11' ? (<> Cancelled <XCircleIcon className="ml-1 w-4 text-white" /> </>) : null}
             {status === '12' ? (<> Expired <XCircleIcon className="ml-1 w-4 text-white" /> </>) : null}
