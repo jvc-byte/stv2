@@ -110,7 +110,7 @@ const TransactionDetails = () => {
 
                     <div className="sm:grid-cols-6 mt-4">
                         <div className="col-span-6 border rounded-md shadow-md p-2">
-                            <p className="text-center text-gray-500">Chill we&apos;ll get your Transaction soon</p>
+                            <p className="text-center text-gray-500">Chill we&apos;ll get your transaction details soon</p>
                         </div>
                     </div>
                 </div>
@@ -344,7 +344,7 @@ const TransactionDetails = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="mt-4 flex justify-center gap-4">
+                <div className="mt-4 flex flex-col sm:flex-row justify-center gap-4">
                     <button className="bg-teal-500 text-white btn wide px-6 py-2 rounded-md hover:bg-teal-700">I DON&apos;T Agree to Transaction</button>
                     <button className="bg-teal-500 text-white btn wide px-6 py-2 rounded-md hover:bg-teal-700">I Agree to Transaction</button>
                 </div>
