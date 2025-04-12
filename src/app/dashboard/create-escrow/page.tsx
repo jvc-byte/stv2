@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState } from "react";
-import { useActiveAccount, useSendTransaction } from "thirdweb/react";
+import { useActiveAccount, useProfiles, useSendTransaction } from "thirdweb/react";
 import { useRouter } from "next/navigation";
 import { createEscrowTransaction } from "../../api/dashboard/create-escrow/CreateEscrow";
 import CurrencyDropdown from "@/app/components/dashboard/transactions/CurrencyDropdown";
@@ -8,9 +8,13 @@ import ItemCategoryDropdown from "@/app/components/dashboard/transactions/ItemCa
 import RoleDropdown from "@/app/components/dashboard/transactions/RoleDropdown";
 import ShippingFeePaidBy from "@/app/components/dashboard/transactions/ShippingFeePaidBy";
 import ShippingMethodDropdown from "@/app/components/dashboard/transactions/ShippingMethodDropdown";
+import { client } from "@/lib/client";
 
 export default function CreateEscrow() {
     const account = useActiveAccount();
+    const { data: profiles } = useProfiles({
+            client,
+        });
     const [formData, setFormData] = useState({
         escrowTitle: '',
         role: '',
@@ -60,6 +64,7 @@ export default function CreateEscrow() {
     const handleSubmit = useCallback(
         async (e: React.FormEvent) => {
             e.preventDefault();
+            
 
             if (validateForm()) {
                 try {
@@ -123,7 +128,8 @@ export default function CreateEscrow() {
                                         timestamp: new Date().toISOString(),
                                         method: 'createEscrow',
                                         initiator_address: (account?.address)?.toString() || 'Unknown',
-                                        client_id: receipt.client.clientId.toString()
+                                        client_id: receipt.client.clientId.toString(),
+                                        initiator_email: profiles?.[0]?.details?.email || 'sealedtrustcss@gmail.com',
                                     };
 
                                     // Get user email (you'll need to add this to your form or get it from user context)
@@ -167,7 +173,7 @@ export default function CreateEscrow() {
                 console.log('Form has errors, please fix them.');
             }
         },
-        [validateForm, formData, sendTransaction, account?.address, router]
+        [validateForm, formData, sendTransaction, account?.address, router, profiles]
     );
 
     return (

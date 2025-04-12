@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
+import { POST as sendNotification } from '@/app/api/dashboard/transaction-details/send-notification/route';
 
 export async function POST(request: Request) {
     try {
@@ -23,6 +24,26 @@ export async function POST(request: Request) {
                 { error: 'Transaction not found' },
                 { status: 404 }
             );
+        }
+
+        // Send notification if status is one of the ones we care about
+        if (['2', '11', '16'].includes(status)) {
+            // Get the current host from the request URL
+            const url = new URL(request.url);
+            const baseUrl = new URL('/api/dashboard/transaction-details/send-notification', url);
+
+            const notificationRequest = new Request(baseUrl.toString(), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tx_id,
+                    status
+                }),
+            });
+
+            await sendNotification(notificationRequest);
         }
 
         return NextResponse.json({
