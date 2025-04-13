@@ -270,7 +270,6 @@ const templateSource = `
         </div>
 
         <div style="text-align: center">
-          <a href="{{viewDetailsUrl}}" class="cta-button">Agree</a>
           <a href="{{viewDetailsUrl}}" class="cta-button">Review and Agree</a>
         </div>
 

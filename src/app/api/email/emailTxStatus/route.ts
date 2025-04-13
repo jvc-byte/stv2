@@ -26,7 +26,8 @@ export async function POST(request: Request) {
             from: process.env.SMTP_FROM || 'SealedTrust <noreply@sealedtrust.com>',
             to,
             subject,
-            text: body,
+            text: body.replace(/<[^>]*>?/gm, ''),
+            html: body
         });
 
         console.log('Message sent: %s', info.messageId);

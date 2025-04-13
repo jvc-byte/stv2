@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
-import { POST as sendNotification } from '@/app/api/dashboard/transaction-details/send-notification/route';
+import { POST as sendNotification } from '@/app/api/email/send-notification/route';
 
 export async function POST(request: Request) {
     try {
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
         if (['2', '11', '16'].includes(status)) {
             // Get the current host from the request URL
             const url = new URL(request.url);
-            const baseUrl = new URL('/api/dashboard/transaction-details/send-notification', url);
+            const baseUrl = new URL('/api/email/send-notification', url);
 
             const notificationRequest = new Request(baseUrl.toString(), {
                 method: 'POST',
