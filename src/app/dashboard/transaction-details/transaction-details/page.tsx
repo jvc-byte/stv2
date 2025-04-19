@@ -1,6 +1,6 @@
 'use client'
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { TransactionDetailsType } from '../../../api/types'
 import TruncateAndCopy from '@/app/components/TruncateAndCopy';
 
@@ -291,4 +291,10 @@ const TransactionDetails = () => {
     );
 };
 
-export default TransactionDetails;
+export default function TransactionDetailsPage() {
+  return (
+    <Suspense fallback={<div>Loading transaction details...</div>}>
+      <TransactionDetails />
+    </Suspense>
+  );
+}
