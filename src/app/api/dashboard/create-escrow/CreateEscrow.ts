@@ -4,7 +4,7 @@ import { baseSepolia } from "thirdweb/chains";
 import { CREATE_ESCROW_CONTRACT_ADDRESS } from "@/lib/contracts";
 import { formDataType } from "../../types";
 
-export const createEscrowTransaction = async (formData: formDataType) => {
+export default function createEscrowTransaction(formData: formDataType) {
     const contract = getContract({
         client: client,
         chain: baseSepolia,

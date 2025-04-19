@@ -25,7 +25,8 @@
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
     "react-hot-toast": "^2.5.2",
-    "thirdweb": "^5.87.2"
+    "thirdweb": "^5.87.2",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@types/node": "^20",

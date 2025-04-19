@@ -2,13 +2,14 @@
 import { useCallback, useState } from "react";
 import { useActiveAccount, useProfiles, useSendTransaction } from "thirdweb/react";
 import { useRouter } from "next/navigation";
-import { createEscrowTransaction } from "../../api/dashboard/create-escrow/CreateEscrow";
+import createEscrowTransaction from "../../api/dashboard/create-escrow/CreateEscrow";
 import CurrencyDropdown from "@/app/components/dashboard/transactions/CurrencyDropdown";
 import ItemCategoryDropdown from "@/app/components/dashboard/transactions/ItemCategory";
 import RoleDropdown from "@/app/components/dashboard/transactions/RoleDropdown";
 import ShippingFeePaidBy from "@/app/components/dashboard/transactions/ShippingFeePaidBy";
 import ShippingMethodDropdown from "@/app/components/dashboard/transactions/ShippingMethodDropdown";
 import { client } from "@/lib/client";
+import { z } from "zod";
 
 export default function CreateEscrow() {
     const account = useActiveAccount();
@@ -32,9 +33,23 @@ export default function CreateEscrow() {
     const { mutate: sendTransaction, isPending } = useSendTransaction();
     const router = useRouter();
 
+    // Define schema for validation
+    const escrowSchema = z.object({
+        escrowTitle: z.string().trim().min(1, "Escrow Title is required"),
+        role: z.string().trim().min(1, "Role is required"),
+        currency: z.string().trim().min(1, "Currency is required"),
+        inspectionPeriod: z.number().gt(0, "Inspection period must be a valid number greater than 0"),
+        itemName: z.string().trim().min(1, "Item Name is required"),
+        price: z.number().gt(0, "Price must be a valid number greater than 0"),
+        itemCategory: z.string().trim().min(1, "Item Category is required"),
+        itemDescription: z.string().trim().min(1, "Item Description is required"),
+        shippingMethod: z.string().trim().min(1, "Shipping Method is required"),
+        shippingFeePaidBy: z.string().trim().min(1, "Shipping Fee Paid By is required"),
+    });
+
     const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData(prev => ({ ...prev, [name]: name === 'inspectionPeriod' || name === 'price' ? Number(value) : value }));
         setErrors(prev => ({ ...prev, [name]: '' }));
     }, []);
 
@@ -44,22 +59,24 @@ export default function CreateEscrow() {
     }, []);
 
     const validateForm = useCallback(() => {
-        const newErrors: Record<string, string> = {};
-
-        if (!formData.escrowTitle.trim()) newErrors.escrowTitle = 'Escrow Title is required';
-        if (!formData.role) newErrors.role = 'Role is required';
-        if (!formData.currency) newErrors.currency = 'Currency is required';
-        if (formData.inspectionPeriod <= 0 || isNaN(formData.inspectionPeriod)) newErrors.inspectionPeriod = 'Inspection period must be a valid number greater than 0';
-        if (!formData.itemName.trim()) newErrors.itemName = 'Item Name is required';
-        if (formData.price <= 0 || isNaN(formData.price)) newErrors.price = 'Price must be a valid number greater than 0';
-        if (!formData.itemCategory) newErrors.itemCategory = 'Item Category is required';
-        if (!formData.itemDescription.trim()) newErrors.itemDescription = 'Item Description is required';
-        if (!formData.shippingMethod) newErrors.shippingMethod = 'Shipping Method is required';
-        if (!formData.shippingFeePaidBy) newErrors.shippingFeePaidBy = 'Shipping Fee Paid By is required';
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    }, [formData]);
+        // Zod expects all fields to be correct type, so coerce numbers
+        const safeFormData = {
+          ...formData,
+          inspectionPeriod: Number(formData.inspectionPeriod),
+          price: Number(formData.price)
+        };
+        const result = escrowSchema.safeParse(safeFormData);
+        if (!result.success) {
+          const newErrors: Record<string, string> = {};
+          result.error.errors.forEach((err) => {
+            if (err.path[0]) newErrors[err.path[0] as string] = err.message;
+          });
+          setErrors(newErrors);
+          return false;
+        }
+        setErrors({});
+        return true;
+    }, [formData, escrowSchema]);
 
     const handleSubmit = useCallback(
         async (e: React.FormEvent) => {
