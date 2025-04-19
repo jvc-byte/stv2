@@ -1,45 +1,60 @@
-import { client } from "@/lib/client";
-import { getContract } from "thirdweb";
-import { useActiveAccount, useReadContract } from "thirdweb/react";
-import { baseSepolia } from "thirdweb/chains";
-import { CREATE_ESCROW_CONTRACT_ADDRESS } from "@/lib/contracts";
-import { useEffect, useState } from 'react';
-import { Escrow } from "../../types";
+// api/dashboard/create-escrow/FetchEscrowData.ts
+import { useActiveAccount } from "thirdweb/react";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Escrow, RawEscrow } from '@/app/api/types';
 
 export const FetchEscrowsData = () => {
-    const contract = getContract({ client, chain: baseSepolia, address: CREATE_ESCROW_CONTRACT_ADDRESS });
-    const account = useActiveAccount();
+  const account = useActiveAccount();
+  const [isPending, setIsPending] = useState<boolean>(true);
+  const [escrowsData, setEscrowsData] = useState<Escrow[]>([]);
 
-    const { data: escrows, isPending } = useReadContract({
-        contract,
-        method: "function getEscrowsByInitiator(address initiator) view returns ((uint256 escrow_id, address initiator, string transaction_title, string role, string currency, uint256 inspection_period, string item_name, uint256 price, string item_category, string item_description, string shipping_method, string shipping_fee_paid_by, uint8 Escrowstatus, uint256 created_on)[])",
-        params: () => Promise.resolve([account?.address ?? ""] as const)
-    });
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!account?.address) {
+        setIsPending(false);
+        return;
+      }
 
-    const [escrowsData, setEscrowsData] = useState<Escrow[]>([]);
+      try {
+        setIsPending(true);
+        const response = await axios.get('/api/dashboard/get-escrow-by-initiator', {
+          params: { initiator_address: account.address }
+        });
 
-    useEffect(() => {
-        if (escrows && escrows.length > 0) {
-            const structuredEscrows = escrows.map(escrow => ({
-                escrow_id: escrow.escrow_id.toString(),
-                initiator: escrow.initiator,
-                transaction_title: escrow.transaction_title,
-                role: escrow.role,
-                currency: escrow.currency,
-                inspection_period: escrow.inspection_period.toString(),
-                item_name: escrow.item_name,
-                price: escrow.price.toString(),
-                item_category: escrow.item_category,
-                item_description: escrow.item_description,
-                shipping_method: escrow.shipping_method,
-                shipping_fee_paid_by: escrow.shipping_fee_paid_by,
-                escrow_status: escrow.Escrowstatus.toString(),
-                created_on: new Date(Number(escrow.created_on) * 1000).toLocaleString(),
-            }));
+        if (response.data && Array.isArray(response.data)) {
+          const structuredEscrows = response.data.map((escrow: RawEscrow) => ({
+            escrow_id: escrow.transaction_id.toString(),
+            initiator: escrow.initiator_address,
+            transaction_title: escrow.escrow_title,
+            role: escrow.initiator_role,
+            currency: escrow.currency,
+            inspection_period: escrow.inspection_period,
+            item_name: escrow.item_name,
+            price: escrow.item_price.toString(),
+            item_category: escrow.item_category,
+            item_description: escrow.item_description,
+            shipping_method: escrow.shipping_method,
+            shipping_fee_paid_by: escrow.shipping_fee_paid_by,
+            escrow_status: escrow.status || "0",
+            created_on: new Date(escrow.timestamp).toLocaleString(),
+            transaction_hash: escrow.transaction_hash,
+            block_explorer_url: escrow.block_explorer_url,
+            chain_name: escrow.chain_name,
+            status_message: escrow.status_message
+          }));
 
-            setEscrowsData(structuredEscrows);
+          setEscrowsData(structuredEscrows);
         }
-    }, [escrows]);
+      } catch (err) {
+        console.error("Error fetching escrows:", err);
+      } finally {
+        setIsPending(false);
+      }
+    };
 
-    return { escrows, escrowsData, isPending, account };
+    fetchData();
+  }, [account?.address]);
+
+  return { escrowsData, isPending, account };
 };

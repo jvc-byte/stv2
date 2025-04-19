@@ -6,7 +6,6 @@ import { client } from '@/lib/client';
 
 const EscrowDetails = () => {
     const account = useActiveAccount();
-    const [countryCode, setCountryCode] = useState('US');
     const [email, setEmail] = useState('');
     const [agreeToTerms, setAgreeToTerms] = useState(false);
     const [isSendingEmail, setIsSendingEmail] = useState(false);
@@ -371,23 +370,7 @@ const EscrowDetails = () => {
                                 required
                             />
                         </div>
-                        <div className="flex w-full sm:w-1/2">
-                            <select
-                                id="countries"
-                                value={countryCode}
-                                onChange={(e) => setCountryCode(e.target.value)}
-                                className="w-20 text-gray-900 text-sm rounded-l-lg border border-gray-300 h-10 px-4 focus:ring-2 focus:ring-teal-200 focus:border-transparent"
-                            >
-                                <option value="US">IN</option>
-                                <option value="CA">CA</option>
-                                <option value="FR">Fr</option>
-                            </select>
-                            <input
-                                type="text"
-                                className="flex-1 pl-4 border-l-0 rounded-l-0 text-sm h-10 font-normal shadow-xs text-gray-900 bg-transparent border border-gray-300 rounded-r-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-200 focus:border-transparent"
-                                placeholder="+91 000 000 0000"
-                            />
-                        </div>
+
                     </div>
                 </div>
 

@@ -5,13 +5,19 @@ import SignInButton from '../SignInButton'
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
-const navigation = [
-  { name: 'My Transactions', href: '#', current: true },
-  { name: 'My Integrations', href: '#', current: false },
-  { name: 'Get Verified', href: '#', current: false },
-  { name: 'Help', href: '#', current: false },
-  { name: 'Contact Us', href: '#', current: false },
+interface NavItem {
+  name: string;
+  href: string;
+}
+
+const navigation: NavItem[] = [
+  { name: 'My Transactions', href: '/dashboard' },
+  { name: 'Create Escrow', href: '/dashboard/create-escrow' },
+  { name: 'Request Feature', href: '#' },
+  { name: 'Help', href: '#' },
+  { name: 'Contact Us', href: '#' },
 ]
 
 function classNames(...classes: string[]) {
@@ -20,6 +26,7 @@ function classNames(...classes: string[]) {
 
 export default function DashNav() {
   const navRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   return (
     <div>
@@ -60,9 +67,9 @@ export default function DashNav() {
                         <Link
                           key={item.name}
                           href={item.href}
-                          aria-current={item.current ? 'page' : undefined}
+                          aria-current={pathname === item.href ? 'page' : undefined}
                           className={classNames(
-                            item.current ? 'border-b-2 border-white text-white' : 'text-gray-200 border-b-2 border-transparent hover:border-white hover:text-white',
+                            pathname === item.href ? 'border-b-2 border-white text-white' : 'text-gray-200 border-b-2 border-transparent hover:border-white hover:text-white',
                             'rounded-md px-3 py-2 text-sm font-medium',
                           )}
                         >
@@ -70,7 +77,6 @@ export default function DashNav() {
                         </Link>
                       ))}
                     </div>
-                    <Link href={'/dashboard/create-escrow'} className="hidden lg:block ml-4 py-2 px-6 text-sm rounded-md bg-gradient-to-br from-violet-600 to-teal-400 text-white align-center cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-gradient-to-tr">Start a Transaction</Link>
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -106,30 +112,18 @@ export default function DashNav() {
             >
               <div className="space-y-1 px-2 pt-2 pb-3">
                 {navigation.map((item) => (
-                  <DisclosureButton
+                  <Link
                     key={item.name}
-                    as="a"
                     href={item.href}
-                    aria-current={item.current ? 'page' : undefined}
+                    aria-current={pathname === item.href ? 'page' : undefined}
                     className={classNames(
-                      item.current ? 'border-b-2 border-white text-white' : 'text-gray-200 border-b-2 border-transparent hover:border-white hover:text-white',
+                      pathname === item.href ? 'border-b-2 border-white text-white' : 'text-gray-200 border-b-2 border-transparent hover:border-white hover:text-white',
                       'block rounded-md px-3 py-2 text-base font-medium',
                     )}
                   >
                     {item.name}
-                  </DisclosureButton>
+                  </Link>
                 ))}
-
-                <Link
-                  href={"/dashboard/create-escrow"}
-                  className={classNames(
-                    'block rounded-md px-3 py-2 text-base text-center font-medium',
-                    'text-white hover:bg-green-700',
-                    'bg-gradient-to-br from-violet-600 to-teal-400',
-                  )}
-                >
-                  Start a Transaction
-                </Link>
               </div>
             </DisclosurePanel>
           </>

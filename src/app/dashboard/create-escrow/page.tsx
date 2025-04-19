@@ -132,14 +132,11 @@ export default function CreateEscrow() {
                                         initiator_email: profiles?.[0]?.details?.email || 'sealedtrustcss@gmail.com',
                                     };
 
-                                    // Get user email (you'll need to add this to your form or get it from user context)
-                                    const email = 'user@example.com'; // Replace with actual user email
-
-                                    // Send data to your API endpoint
+                                    // Send data to API endpoint
                                     const response = await fetch('/api/dashboard/create-escrow', {
                                         method: 'POST',
                                         headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ email, transactionDetails })
+                                        body: JSON.stringify({ transactionDetails })
                                     });
 
                                     if (!response.ok) {
@@ -162,12 +159,12 @@ export default function CreateEscrow() {
                         },
                         onError: (error: unknown) => {
                             console.error("Transaction failed:", error);
-                            alert(error instanceof Error ? `Failed to create escrow: ${error.message}` : 'Failed to create escrow: An unknown error occurred.');
+                            alert(error instanceof Error ? `Failed to create escrow: ${error.message}` : 'Failed to create escrow: Please try again.');
                         },
                     });
                 } catch (error: unknown) {
                     console.error('Error creating escrow:', error);
-                    alert(error instanceof Error ? `Failed to create escrow: ${error.message}` : 'Failed to create escrow: An unknown error occurred.');
+                    alert(error instanceof Error ? `Failed to create escrow: ${error.message}` : 'Failed to create escrow: Please try again.');
                 }
             } else {
                 console.log('Form has errors, please fix them.');

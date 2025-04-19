@@ -105,7 +105,7 @@ switch (status) {
                     </div>
                     
                     <center>
-                        <a href="https://stv2.vercel.app/dashboard/${tx_id}" class="button">Make Payment Now</a>
+                        <a href="https://stv2.vercel.app/dashboard/escrow-deposit?tx_id=${tx_id}" class="button">Make Payment Now</a>
                     </center>
                     
                     <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>

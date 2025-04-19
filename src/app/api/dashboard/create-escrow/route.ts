@@ -3,11 +3,11 @@ import pool from '@/lib/db'; // Adjust the import path as needed
 
 export async function POST(request: Request) {
     try {
-        const { email, transactionDetails } = await request.json();
+        const { transactionDetails } = await request.json();
 
-        if (!email || !transactionDetails) {
+        if (!transactionDetails) {
             return NextResponse.json(
-                { success: false, message: 'Email and transaction details are required' },
+                { success: false, message: 'Transaction details are required' },
                 { status: 400 }
             );
         }
@@ -31,8 +31,8 @@ export async function POST(request: Request) {
                 transaction_hash, item_name, item_price, escrow_title, initiator_role,
                 currency, inspection_period, shipping_method, shipping_fee_paid_by,
                 item_category, item_description, block_explorer_url, chain_id, chain_name,
-                transaction_status, block_number, timestamp, method, initiator_address, client_id
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+                transaction_status, block_number, timestamp, method, initiator_address, client_id, status, status_message, initiator_email
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
             RETURNING *;
         `;
 
@@ -57,6 +57,9 @@ export async function POST(request: Request) {
             transactionDetails.method,
             transactionDetails.initiator_address,
             transactionDetails.client_id,
+            `1`,
+            `Escrow Initialized`,
+            transactionDetails.initiator_email,
         ];
 
         // Execute the insert query

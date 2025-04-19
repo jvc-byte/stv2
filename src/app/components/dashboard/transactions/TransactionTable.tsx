@@ -1,10 +1,12 @@
 'use client'
 import { FetchEscrowsData } from '../../../api/dashboard/create-escrow/FetchEscrowData';
 import TransactionStatus from "./TransactionStatus";
-
+import { useRouter } from 'next/navigation';
+import TruncateAndCopy from '../../TruncateAndCopy';
 
 export default function TransactionTable() {
     const { escrowsData, isPending, account } = FetchEscrowsData();
+    const router = useRouter();
 
     // Render loading state
     if (isPending) {
@@ -14,6 +16,7 @@ export default function TransactionTable() {
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Transaction Hash</th>
                             <th>Transaction Title</th>
                             <th>Created On</th>
                             <th>Amount</th>
@@ -44,6 +47,7 @@ export default function TransactionTable() {
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Transaction Hash</th>
                             <th>Transaction Title</th>
                             <th>Created On</th>
                             <th>Amount</th>
@@ -67,6 +71,7 @@ export default function TransactionTable() {
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Transaction Hash</th>
                         <th>Transaction Title</th>
                         <th>Created On</th>
                         <th>Amount</th>
@@ -79,12 +84,20 @@ export default function TransactionTable() {
                     {escrowsData.map((escrow) => (
                         <tr key={escrow.escrow_id} className="hover">
                             <td>{escrow.escrow_id}</td>
+                            <td><TruncateAndCopy hash={escrow.transaction_hash} /></td>
                             <td>{escrow.transaction_title}</td>
                             <td>{escrow.created_on}</td>
                             <td>{escrow.price} {escrow.currency}</td>
                             <td>{escrow.role}</td>
                             <td><TransactionStatus status={escrow.escrow_status} /></td>
-                            <td className="font-semibold text-center shadow-xs text-green-700 text-sm rounded-md py-1 px-1 cursor-pointer hover:bg-teal-600 hover:text-white">
+                            <td
+                                className="font-semibold text-center shadow-xs text-green-700 text-sm rounded-md py-1 px-1 cursor-pointer hover:bg-teal-600 hover:text-white"
+                                onClick={() => {
+                                    if (escrow.transaction_hash) {
+                                        router.push(`/dashboard/transaction-details/transaction-details?tx_id=${encodeURIComponent(escrow.transaction_hash)}`);
+                                    }
+                                }}
+                            >
                                 Details
                             </td>
                         </tr>
