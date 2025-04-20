@@ -1,7 +1,12 @@
+'use client';
+import { Suspense } from 'react';
+import Loading from '@/app/components/Loading';
+import CreateTx from '@/app/components/dashboard/escrow-deposit/CreateTx';
+
 export default function EscrowDeposit() {
-    return (
-        <div>
-            <h1>Escrow Deposit</h1>
-        </div>
-    )
+  return (
+    <Suspense fallback={<Loading />}>
+      <CreateTx />
+    </Suspense>
+  );
 }

@@ -11,6 +11,12 @@ export type formDataType = {
     shippingFeePaidBy: string;
 }
 
+export type createTxDataType = {
+    tx_id: string;
+    sellerAddress: string;
+    price: number;
+}
+
 // Define the Escrow type based on your structure
 export interface Escrow {
     escrow_id: string;

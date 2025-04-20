@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "module": "NodeNext", // or "CommonJS" if you prefer
+      "moduleResolution": "NodeNext",
+      "target": "ES2020",
+      "esModuleInterop": true
+    }
+  }
