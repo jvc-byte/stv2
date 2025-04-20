@@ -12,6 +12,7 @@ function CreateTx() {
   const [amount, setAmount] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [transactionCreated, setTransactionCreated] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   // Fetch amount from DB based on tx_id
   useEffect(() => {
@@ -28,7 +29,7 @@ function CreateTx() {
     const newErrors: Record<string, string> = {};
     if (!tx_id.trim()) newErrors.tx_id = "Transaction ID is required";
     if (!sellerAddress.trim()) newErrors.sellerAddress = "Seller address is required";
-    if (!amount.trim() || isNaN(Number(amount)) || Number(amount) <= 0) newErrors.amount = "Valid amount is required";
+    if (!amount.trim() || isNaN(Number(amount)) || Number(amount) < 0.0001) newErrors.amount = "Amount must be at least 0.0001";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [tx_id, sellerAddress, amount]);
@@ -37,6 +38,7 @@ function CreateTx() {
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!validateForm()) return;
+      setSubmitLoading(true);
       try {
         // Call backend API to create the transaction
         const response = await fetch("/api/dashboard/escrow-deposit/createTx", {
@@ -54,6 +56,8 @@ function CreateTx() {
         alert("Transaction created successfully! Tx Hash: " + (data?.txHash || data));
       } catch (error: unknown) {
         alert(error instanceof Error ? `Failed: ${error.message}` : 'Failed: Please try again.');
+      } finally {
+        setSubmitLoading(false);
       }
     },
     [sellerAddress, amount, validateForm, tx_id]
@@ -92,18 +96,21 @@ function CreateTx() {
             name="amount"
             value={amount}
             readOnly
+            min={0.0001}
+            step={0.0001}
             className="w-full border px-3 py-2 rounded bg-gray-100"
           />
           {errors.amount && <p className="text-red-500 text-sm mt-1">{errors.amount}</p>}
         </div>
         {transactionCreated && (
-          <div className="mt-4 p-4 bg-green-100 text-green-800 rounded text-center">Transaction created on contract!</div>
+          <div className="mt-4 p-4 bg-green-100 text-green-800 rounded text-center">Transaction Initiated on Blockchain!</div>
         )}
         <button
           type="submit"
           className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-full"
+          disabled={submitLoading || transactionCreated}
         >
-          Create Transaction
+          {submitLoading ? "Initiating..." : transactionCreated ? "Initiated" : "Initiate Transaction"}
         </button>
       </form>
       {/* Deposit section only shows after transaction is created */}
