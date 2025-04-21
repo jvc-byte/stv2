@@ -185,7 +185,7 @@ export async function POST(request: Request) {
                             </div>
                             
                             <center>
-                                <a href="https://stv2.vercel.app/dashboard/${tx_id}/edit" class="button">Review and Modify</a>
+                                <a href="https://stv2.vercel.app/dashboard/create-escrow" class="button">Review and Modify</a>
                             </center>
                             
                             <p>If you have any questions about the requested modifications, you can contact the seller through our messaging system or reach out to our support team for assistance.</p>

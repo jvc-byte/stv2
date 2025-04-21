@@ -93,7 +93,7 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
   );
 
   return (
-    <div className="max-w-xl mx-auto mt-8 p-6 bg-blue-50 rounded shadow text-center">
+    <div className="max-w-xl mx-auto mt-8 p-6 bg-teal-50 rounded shadow text-center">
       <h2 className="text-xl font-bold mb-2">Deposit</h2>
       <form className="space-y-4" onSubmit={handleDepositSubmit}>
         <div>

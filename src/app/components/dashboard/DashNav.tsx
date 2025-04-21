@@ -15,7 +15,7 @@ interface NavItem {
 const navigation: NavItem[] = [
   { name: 'My Transactions', href: '/dashboard' },
   { name: 'Create Escrow', href: '/dashboard/create-escrow' },
-  { name: 'Request Feature', href: '#' },
+  { name: 'View Progress', href: '/dashboard/view-transaction-progress' },
   { name: 'Help', href: '#' },
   { name: 'Contact Us', href: '#' },
 ]

@@ -130,7 +130,7 @@ function CreateTx() {
         )}
         <button
           type="submit"
-          className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-full"
+          className="mt-4 px-6 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 w-full"
           disabled={submitLoading || transactionCreated}
         >
           {submitLoading ? "Initiating..." : transactionCreated ? "Initiated" : "Initiate Transaction"}

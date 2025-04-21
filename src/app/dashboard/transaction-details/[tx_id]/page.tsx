@@ -2,10 +2,10 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { TransactionDetailsType } from '../../../api/types'
+import TruncateAndCopy from '@/app/components/TruncateAndCopy';
 
 const TransactionDetails = () => {
     const router = useRouter();
-    const [copied, setCopied] = useState(false);
     const params = useParams();
     const { tx_id } = params; // Get the transaction ID from the URL
     const [isUpdating, setIsUpdating] = useState(false);
@@ -56,20 +56,6 @@ const TransactionDetails = () => {
     } else if (escrowFeePaidBy === 'Seller') {
         sellerProceeds = sellerProceeds - parseFloat(escrowFeeValue);
     }
-
-    // Function to copy text to clipboard
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
-        });
-    };
-
-    // Function to truncate text
-    const truncateText = (text: string, maxLength: number) => {
-        if (text.length <= maxLength) return text;
-        return `${text.slice(0, maxLength)}...`;
-    };
 
     const handleTransactionResponse = async (response: 'approve' | 'decline' | 'modify') => {
         setIsUpdating(true);
@@ -297,29 +283,13 @@ const TransactionDetails = () => {
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Block Explorer Url:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.block_explorer_url, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.block_explorer_url)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.block_explorer_url} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Transaction Hash:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.transaction_hash, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.transaction_hash)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.transaction_hash} />
                                     </td>
                                 </tr>
                             </tbody>
@@ -353,15 +323,7 @@ const TransactionDetails = () => {
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Timestamp:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.timestamp, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.timestamp)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.timestamp} />
                                     </td>
                                 </tr>
                                 <tr>
@@ -371,29 +333,13 @@ const TransactionDetails = () => {
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Initiator Address:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.initiator_address, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.initiator_address)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.initiator_address} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Client ID:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.client_id, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.client_id)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.client_id} />
                                     </td>
                                 </tr>
                             </tbody>

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useActiveAccount, useProfiles, } from 'thirdweb/react';
 import { client } from '@/lib/client';
+import TruncateAndCopy from '../../TruncateAndCopy';
 
 const EscrowDetails = () => {
     const account = useActiveAccount();
@@ -132,23 +133,6 @@ const EscrowDetails = () => {
         }
     };
 
-    const [copied, setCopied] = useState(false);
-
-    // Function to copy text to clipboard
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
-        });
-    };
-
-    // Function to truncate text
-    const truncateText = (text: string, maxLength: number) => {
-        if (text.length <= maxLength) return text;
-        return `${text.slice(0, maxLength)}...`;
-    };
-
-
     return (
         <div className="font-[family-name:var(--font-geist-sans)] mx-auto max-w-5xl my-6 px-4 sm:px-6 lg:px-8 border rounded-md shadow-md pb-8">
             <div className="text-black flex flex-col">
@@ -270,29 +254,13 @@ const EscrowDetails = () => {
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Block Explorer Url:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.blockExplorerUrl, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.blockExplorerUrl)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.blockExplorerUrl} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Transaction Hash:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.transactionHash, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.transactionHash)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.transactionHash} />
                                     </td>
                                 </tr>
                             </tbody>
@@ -326,15 +294,7 @@ const EscrowDetails = () => {
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Timestamp:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.timestamp, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.timestamp)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.timestamp} />
                                     </td>
                                 </tr>
                                 <tr>
@@ -348,15 +308,7 @@ const EscrowDetails = () => {
                                 <tr>
                                     <td className="p-2 font-semibold w-1/2 sm:w-1/4">Client ID:</td>
                                     <td className="p-2 w-1/2 sm:w-3/4 flex">
-                                        <span className="pr-20 truncate">
-                                            {truncateText(transactionDetails.clientId, 10)}
-                                        </span>
-                                        <button
-                                            onClick={() => copyToClipboard(transactionDetails.clientId)}
-                                            className="ml-4 text-blue-500 hover:text-blue-700"
-                                        >
-                                            {copied ? 'Copied!' : 'Copy'}
-                                        </button>
+                                        <TruncateAndCopy hash={transactionDetails.clientId} />
                                     </td>
                                 </tr>
                             </tbody>
@@ -394,13 +346,13 @@ const EscrowDetails = () => {
                             type="checkbox"
                             checked={agreeToTerms}
                             onChange={handleCheckboxChange}
-                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
                             required
                         />
                     </div>
                     <div className="ml-3 text-sm">
                         <label htmlFor="terms" className="font-medium text-gray-700">
-                            I agree to the <a href="/terms" className="text-blue-600 hover:underline">Terms and Conditions</a> and <a href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>
+                            I agree to the <a href="/terms" className="text-teal-600 hover:underline">Terms and Conditions</a> and <a href="/privacy" className="text-teal-600 hover:underline">Privacy Policy</a>
                         </label>
                     </div>
                 </div>
