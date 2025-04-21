@@ -52,6 +52,16 @@ function CreateTx() {
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data?.error || "Failed to create transaction");
+        // Update transaction status in the database before showing success
+        await fetch(`/api/dashboard/transaction-details/update-status`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tx_id,
+            status: "3",
+            message: "Payment Processing"
+          })
+        });
         setTransactionCreated(true);
         alert("Transaction created successfully! Tx Hash: " + (data?.txHash || data));
       } catch (error: unknown) {

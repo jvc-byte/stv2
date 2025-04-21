@@ -1,11 +1,14 @@
 'use client';
 
 import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 
 function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
   const [depositTxId, setDepositTxId] = useState(tx_id);
   const [depositAmount, setDepositAmount] = useState(amount);
   const [depositLoading, setDepositLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleDepositSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -41,6 +44,18 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
         }
 
         alert(`Deposit successful!\nTransaction Hash: ${data.txHash}`);
+        // Update transaction status in the database before redirecting
+        await fetch(`/api/dashboard/transaction-details/update-status`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tx_id: depositTxId,
+            status: "4",
+            message: "Money deposited to multisig wallet"
+          })
+        });
+        // Redirect to transaction-progress page after successful deposit
+        router.push(`/dashboard/transaction-progress?tx_id=${depositTxId}`);
       } catch (error: unknown) {
         console.error("Deposit error:", error);
         alert(error instanceof Error ? error.message : "Deposit failed. Please try again.");
@@ -48,7 +63,7 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
         setDepositLoading(false);
       }
     },
-    [depositTxId, depositAmount]
+    [depositTxId, depositAmount, router]
   );
 
   return (
