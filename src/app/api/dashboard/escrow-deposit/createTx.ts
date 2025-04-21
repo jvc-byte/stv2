@@ -1,21 +1,13 @@
 import { MULTISIG_WALLET_CONTRACT_ADDRESS, MULTISIG_WALLET_CONTRACT_ABI } from "@/lib/contracts";
 import { createTxDataType } from "@/app/api/types";
 import { createWalletClient, http, publicActions } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia } from "viem/chains";
 import { parseEther } from "viem/utils";
-// import dotenv from "dotenv";
+import { exportedAccount, exportedRpcUrl } from "@/lib/accounts";
 
-// dotenv.config();
-// dotenv.config({ path: '.env.local', override: true });
-// const privateKey = process.env.GEN_PRIVATE_KEY;
-// if (!privateKey) {
-//   throw new Error("GEN_PRIVATE_KEY is not set in environment variables");
-// }
+const rpcUrl = exportedRpcUrl!;
+const account = exportedAccount;
 
-const rpcUrl = "https://84532.rpc.thirdweb.com/184b4b84b53c73f73c3abb20320f9a28";
-const privateKey = "0x75c9c54404eeddabebca2a79b272903b013b4b1204de1e66b6e3910298e2d269";
-const account = privateKeyToAccount(privateKey);
 
 // Create transaction function
 export async function createTransactions(formData: createTxDataType) {

@@ -85,7 +85,7 @@ export default function CreateEscrow() {
 
             if (validateForm()) {
                 try {
-                    const transaction = await createEscrowTransaction({...formData, price: Math.round(formData.price)});
+                    const transaction = createEscrowTransaction({ ...formData, price: Math.round(formData.price) });
 
                     sendTransaction(transaction, {
                         onSuccess: async (receipt) => {
