@@ -1,8 +1,18 @@
 "use client";
 import { useState } from "react";
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Loading from "@/app/components/Loading";
 
-export default function UpdateDeliveryStatusPage() {
+export default function UpdateDeliveryStatusPageWrapper() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <UpdateDeliveryStatusPage />
+    </Suspense>
+  );
+}
+
+function UpdateDeliveryStatusPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tx_id = searchParams.get("tx_id");
