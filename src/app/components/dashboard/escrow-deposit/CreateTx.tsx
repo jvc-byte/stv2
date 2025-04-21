@@ -4,6 +4,12 @@ import DepositSection from "@/app/components/dashboard/escrow-deposit/DepositSec
 import Loading from "@/app/components/Loading";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
+import { MULTISIG_WALLET_CONTRACT_ADDRESS } from "@/lib/contracts";
+import { client } from "@/lib/client";
+import { getContract, prepareContractCall } from "thirdweb";
+import { baseSepolia } from "thirdweb/chains";
+import { parseEther } from "viem/utils";
+import { useSendTransaction } from "thirdweb/react";
 
 function CreateTx() {
   const searchParams = useSearchParams();
@@ -13,6 +19,8 @@ function CreateTx() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [transactionCreated, setTransactionCreated] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+
+  const { mutateAsync: sendTransaction } = useSendTransaction();
 
   // Fetch amount from DB based on tx_id
   useEffect(() => {
@@ -40,19 +48,24 @@ function CreateTx() {
       if (!validateForm()) return;
       setSubmitLoading(true);
       try {
-        // Call backend API to create the transaction
-        const response = await fetch("/api/dashboard/escrow-deposit/createTx", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            tx_id,
-            sellerAddress,
-            price: Number(amount),
-          })
+        // Prepare contract call
+        const contract = getContract({
+          client: client,
+          chain: baseSepolia,
+          address: MULTISIG_WALLET_CONTRACT_ADDRESS,
         });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data?.error || "Failed to create transaction");
-        // Update transaction status in the database before showing success
+        const amountInWei = parseEther(amount);
+        const createTransaction = prepareContractCall({
+          contract,
+          method: "function createTransaction(bytes32 txId, address seller, uint256 amount)",
+          params: [
+            tx_id as `0x${string}`,
+            sellerAddress as `0x${string}`,
+            amountInWei,
+          ],
+        });
+        // Send transaction and get result
+        const result = await sendTransaction(createTransaction);
         await fetch(`/api/dashboard/transaction-details/update-status`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -63,14 +76,14 @@ function CreateTx() {
           })
         });
         setTransactionCreated(true);
-        alert("Transaction created successfully! Tx Hash: " + (data?.txHash || data));
+        alert("Transaction created successfully! Tx Hash: " + (result?.transactionHash || JSON.stringify(result)));
       } catch (error: unknown) {
         alert(error instanceof Error ? `Failed: ${error.message}` : 'Failed: Please try again.');
       } finally {
         setSubmitLoading(false);
       }
     },
-    [sellerAddress, amount, validateForm, tx_id]
+    [tx_id, sellerAddress, amount, validateForm, sendTransaction]
   );
 
   return (

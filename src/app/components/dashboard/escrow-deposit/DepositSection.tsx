@@ -2,6 +2,12 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getContract, prepareContractCall } from "thirdweb";
+import { baseSepolia } from "thirdweb/chains";
+import { parseEther } from "viem/utils";
+import { MULTISIG_WALLET_CONTRACT_ADDRESS } from "@/lib/contracts";
+import { client } from "@/lib/client";
+import { useSendTransaction } from "thirdweb/react";
 
 function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
   const [depositTxId, setDepositTxId] = useState(tx_id);
@@ -9,6 +15,7 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
   const [depositLoading, setDepositLoading] = useState(false);
 
   const router = useRouter();
+  const { mutateAsync: sendTransaction } = useSendTransaction();
 
   const handleDepositSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -28,22 +35,31 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
       setDepositLoading(true);
 
       try {
-        const response = await fetch("/api/dashboard/escrow-deposit/depositTx", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            tx_id: depositTxId,
-            amount: depositAmount,
-          })
+        // Prepare contract call
+        const contract = getContract({
+          client: client,
+          chain: baseSepolia,
+          address: MULTISIG_WALLET_CONTRACT_ADDRESS,
         });
 
-        const data = await response.json();
+        const amountInWei = parseEther(depositAmount);
 
-        if (!response.ok) {
-          throw new Error(data?.error || "Failed to deposit");
+        const depositTransaction = prepareContractCall({
+          contract,
+          method: "function deposit(bytes32 txId) payable",
+          params: [
+            depositTxId as `0x${string}`,
+          ],
+          value: amountInWei,
+        });
+        // Send transaction and get result
+        const { transactionHash } = await sendTransaction(depositTransaction);
+
+        if (!transactionHash) {
+          throw new Error("Failed to deposit");
         }
 
-        alert(`Deposit successful!\nTransaction Hash: ${data.txHash}`);
+        alert(`Deposit successful!\nTransaction Hash: ${transactionHash}`);
         // Update transaction status in the database before redirecting
         await fetch(`/api/dashboard/transaction-details/update-status`, {
           method: "POST",
@@ -63,6 +79,7 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
             status: "5"
           })
         });
+        alert(`Deposit successful!\nTransaction Hash: ${transactionHash}`);
         // Redirect to transaction-progress page after successful deposit
         router.push(`/dashboard/transaction-progress?tx_id=${depositTxId}`);
       } catch (error: unknown) {
@@ -72,7 +89,7 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
         setDepositLoading(false);
       }
     },
-    [depositTxId, depositAmount, router]
+    [depositTxId, depositAmount, sendTransaction, router]
   );
 
   return (

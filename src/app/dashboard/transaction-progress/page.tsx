@@ -95,7 +95,7 @@ function TransactionProgressContent() {
         { id: 2, name: 'Seller Review', description: 'Waiting for seller to review and accept the transaction' },
         { id: 3, name: 'Payment', description: 'Waiting for buyer to make payment' },
         { id: 4, name: 'Payment Processing', description: 'Processing payment and setting up escrow' },
-        { id: 5, name: 'Payment Completed', description: 'Payment has been completed successfully' },
+        { id: 5, name: 'Payment Deposited', description: 'Payment has been deposited successfully' },
         { id: 6, name: 'Awaiting Delivery', description: 'Waiting for seller to deliver the item' },
         { id: 7, name: 'Delivery Received', description: 'Delivery has been received successfully' },
         { id: 8, name: 'Transaction Complete', description: 'Transaction has been completed successfully' }
