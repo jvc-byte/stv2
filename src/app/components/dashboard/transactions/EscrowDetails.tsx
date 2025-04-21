@@ -79,6 +79,7 @@ const EscrowDetails = () => {
         setAgreeToTerms(e.target.checked);
     };
 
+    // Send transaction details (including seller email) to the backend and also send email
     const handleSendEmail = async () => {
         if (!email || !agreeToTerms) {
             alert('Please provide a valid email address and agree to the terms.');
@@ -88,11 +89,22 @@ const EscrowDetails = () => {
         setIsSendingEmail(true);
 
         try {
-            const apiUrl = process.env.EMAIL_END_POINT_URL || "../../api/email/sendEmail/";
+            // 1. Insert seller email to DB
+            const insertApiUrl = "/api/dashboard/insert-seller-email";
+            await fetch(insertApiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    transactionHash: transactionDetails.transactionHash,
+                    sellerEmail: email,
+                }),
+            });
 
+            // 2. Send email as before
+            const apiUrl = process.env.EMAIL_END_POINT_URL || "../../api/email/sendEmail/";
             const response = await fetch(apiUrl, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, transactionDetails }),
             });
 
@@ -105,7 +117,7 @@ const EscrowDetails = () => {
             const data = await response.json();
 
             if (data.success) {
-            setEmailSent(true);
+                setEmailSent(true);
                 alert('Transaction details sent successfully.');
                 // Navigate to transaction progress page
                 window.location.href = `/dashboard/transaction-progress?tx_id=${transactionDetails.transactionHash}`;

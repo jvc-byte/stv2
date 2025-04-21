@@ -12,9 +12,9 @@ export async function POST(request: Request) {
             );
         }
 
-        // Get transaction details including buyer's email
+        // Get transaction details including buyer's and seller's emails
         const transactionResult = await pool.query(
-            'SELECT item_name, initiator_email FROM transaction_details WHERE transaction_hash = $1',
+            'SELECT item_name, initiator_email, seller_email FROM transaction_details WHERE transaction_hash = $1',
             [tx_id]
         );
 
@@ -26,13 +26,26 @@ export async function POST(request: Request) {
         }
 
         const transaction = transactionResult.rows[0];
-        const { item_name: itemName, initiator_email: email } = transaction;
+        const { item_name: itemName, initiator_email, seller_email } = transaction;
 
-        if (!email) {
-            return NextResponse.json(
-                { error: 'Buyer email not found' },
-                { status: 400 }
-            );
+        // Determine recipient: seller for status 5, buyer for others
+        let email;
+        if (status === '5') {
+            email = seller_email;
+            if (!email) {
+                return NextResponse.json(
+                    { error: 'Seller email not found' },
+                    { status: 400 }
+                );
+            }
+        } else {
+            email = initiator_email;
+            if (!email) {
+                return NextResponse.json(
+                    { error: 'Buyer email not found' },
+                    { status: 400 }
+                );
+            }
         }
 
         let subject, body;
