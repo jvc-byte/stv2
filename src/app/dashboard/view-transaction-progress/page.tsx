@@ -28,13 +28,13 @@ export default function ViewTransactionProgressPage() {
       <h1 className="text-2xl font-bold mb-4 text-center">View Transaction Progress</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block font-medium mb-1">Transaction ID</label>
+          <label className="block font-medium mb-1">Transaction Hash</label>
           <input
             type="text"
             value={inputTxId}
             onChange={e => setInputTxId(e.target.value)}
             className="w-full border px-3 py-2 rounded"
-            placeholder="Enter transaction ID (0x...)"
+            placeholder="Enter transaction Hash (0x...)"
             required
           />
         </div>
