@@ -19,8 +19,6 @@ const SignInButton: NextPage = () => {
         createWallet("io.metamask"),
         createWallet("com.coinbase.wallet"),
         createWallet("me.rainbow"),
-        createWallet("io.rabby"),
-        createWallet("io.zerion.wallet"),
     ];
 
     const chainID = 8453;
@@ -83,8 +81,10 @@ const SignInButton: NextPage = () => {
                 getLoginPayload: async ({ address }) => generatePayload({ address, chainId: chainID }),
 
                 doLogout: async () => {
-                    console.log("logging out!");
-                    await logout();
+                    if (confirm("Are you sure you want to logout?")) {
+                        console.log("logging out!");
+                        await logout();
+                    }
                 },
             }}
         />

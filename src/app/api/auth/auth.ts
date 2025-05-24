@@ -4,6 +4,7 @@ import { privateKeyToAccount } from "thirdweb/wallets";
 import { client } from "../../../lib/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 const privateKey = process.env.THIRDWEB_ADMIN_PRIVATE_KEY || "";
 
@@ -19,34 +20,54 @@ const thirdwebAuth = createAuth({
 
 export const generatePayload = thirdwebAuth.generatePayload;
 
-export async function login(payload: VerifyLoginPayloadParams) {
+export async function login(payload: VerifyLoginPayloadParams, returnUrl?: string) {
     const verifiedPayload = await thirdwebAuth.verifyPayload(payload);
-    console.log(verifiedPayload);
     if (verifiedPayload.valid) {
       const jwt = await thirdwebAuth.generateJWT({
         payload: verifiedPayload.payload,
       });
       (await cookies()).set("jwt", jwt);
-      return redirect("/dashboard");
+      
+      // Redirect to the return URL if provided, otherwise to dashboard
+      return redirect(returnUrl || "/dashboard");
     }
+    return redirect("/");
   }
 
   export async function isLoggedIn() {
-    const jwt = (await cookies()).get("jwt");
-    console.log(jwt);
-    if (!jwt?.value) {
+    try {
+      const jwt = (await cookies()).get("jwt");
+      if (!jwt?.value) {
+        return false;
+      }
+    
+      const authResult = await thirdwebAuth.verifyJWT({ jwt: jwt.value });
+      if (!authResult.valid) {
+        // If JWT is invalid, remove it
+        (await cookies()).delete("jwt");
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Auth verification error:", error);
       return false;
     }
-  
-    const authResult = await thirdwebAuth.verifyJWT({ jwt: jwt.value });
-    if (!authResult.valid) {
-      return false
-    }
-    return true;
   }
   
   export async function logout() {
     (await cookies()).delete("jwt");
     return redirect("/");
+  }
+
+export async function requireAuth() {
+    const isAuthenticated = await isLoggedIn();
+    if (!isAuthenticated) {
+      const headersList = headers();
+      const currentPath = (await headersList).get("x-invoke-path") || "/";
+      const searchParams = (await headersList).get("x-invoke-query") || "";
+      const returnUrl = searchParams ? `${currentPath}?${searchParams}` : currentPath;
+      
+      return redirect(`/?returnUrl=${encodeURIComponent(returnUrl)}`);
+    }
   }
   
