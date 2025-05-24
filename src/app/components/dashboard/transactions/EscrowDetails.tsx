@@ -19,18 +19,18 @@ const EscrowDetails = () => {
     const searchParams = useSearchParams();
 
     // Function to calculate escrow fee
-    function escrowFee(subTotal: number) {
-        const subTotalValue = parseFloat(subTotal.toString());
-        const escrowFeeValue = subTotalValue * 0.01;
-        return escrowFeeValue.toFixed(2);
+    function escrowFee(itemPrice: string) {
+        const escrowFeeValue = parseFloat(itemPrice) * 0.01;
+        return escrowFeeValue.toFixed(5);
     }
 
     // Retrieve and calculate values before constructing transactionDetails
-    const subTotal = parseFloat(searchParams.get('subTotal') || '0');
-    const escrowFeeValue = escrowFee(subTotal);
+    const itemPrice = searchParams.get('price') || '0.00000';
+    const subTotal = parseFloat(itemPrice);
+    const escrowFeeValue = escrowFee(itemPrice);
     const escrowFeePaidBy = searchParams.get('escrowFeePaidBy') || 'Buyer';
-    let buyerPrice = parseFloat(searchParams.get('subTotal') || '0');
-    let sellerProceeds = parseFloat(searchParams.get('subTotal') || '0');
+    let buyerPrice = parseFloat(itemPrice);
+    let sellerProceeds = parseFloat(itemPrice);
 
     // Deduct escrow fee from buyer or seller based on escrowFeePaidBy
     if (escrowFeePaidBy === 'Buyer') {
@@ -63,10 +63,10 @@ const EscrowDetails = () => {
         method: searchParams.get('method') || 'N/A',
         initiatorAddress: (account?.address)?.toString() || 'N/A',
         clientId: searchParams.get('clientId') || 'N/A',
-        subTotal: subTotal.toFixed(2),
+        subTotal: subTotal.toFixed(5),
         escrowFeePaidBy: escrowFeePaidBy,
-        buyerPrice: buyerPrice.toFixed(2),
-        sellerProceeds: sellerProceeds.toFixed(2),
+        buyerPrice: buyerPrice.toFixed(5),
+        sellerProceeds: sellerProceeds.toFixed(5),
         escrowFee: escrowFeeValue,
         receiverEmail: email || 'N/A',
         escrowInitiatorEmail: profiles?.[0]?.details?.email || 'a user',

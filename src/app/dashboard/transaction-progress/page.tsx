@@ -112,7 +112,7 @@ function TransactionProgressContent() {
                             </svg>
                         </div>
                         <div className="ml-3">
-                            <h3 className="text-sm font-medium text-red-800">Transaction Error</h3>
+                            <h3 className="text-sm font-medium text-red-800">Failed to fetch transaction details</h3>
                             <div className="mt-2 text-sm text-red-700">{error}</div>
                         </div>
                     </div>
@@ -183,12 +183,18 @@ function TransactionProgressContent() {
             </div>
 
             {/* Action Button */}
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex justify-center gap-2">
                 <button
                     onClick={() => window.location.href = '/dashboard'}
                     className="w-full sm:w-auto bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition-colors"
                 >
                     Back to Dashboard
+                </button>
+                <button
+                    onClick={() => window.location.href = '/dashboard/dispute'}
+                    className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors"
+                >
+                    Dispute
                 </button>
             </div>
         </div>
