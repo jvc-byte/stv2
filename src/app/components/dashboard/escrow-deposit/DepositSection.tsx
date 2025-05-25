@@ -119,8 +119,8 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
             name="deposit_amount"
             value={depositAmount}
             onChange={e => setDepositAmount(e.target.value)}
-            step="0.0001"
-            min="0.0001"
+            step="0.00001"
+            min="0.00001"
             className="w-full border px-3 py-2 rounded"
             required
           />
