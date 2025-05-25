@@ -14,7 +14,7 @@ const SignInButton: NextPage = () => {
             auth: {
                 options: ["google", "discord", "telegram", "farcaster", "email", "x", "passkey", "phone", "facebook", "github", "apple"],
             },
-            hidePrivateKeyExport: true,
+            hidePrivateKeyExport: false,
         }),
         // createWallet("io.metamask"),
         // createWallet("com.coinbase.wallet"),

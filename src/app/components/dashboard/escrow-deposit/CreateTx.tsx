@@ -37,7 +37,7 @@ function CreateTx() {
     const newErrors: Record<string, string> = {};
     if (!tx_id.trim()) newErrors.tx_id = "Transaction ID is required";
     if (!sellerAddress.trim()) newErrors.sellerAddress = "Seller address is required";
-    if (!amount.trim() || isNaN(Number(amount)) || Number(amount) < 0.0001) newErrors.amount = "Amount must be at least 0.0001";
+    if (!amount.trim() || isNaN(Number(amount)) || Number(amount) < 0.00001) newErrors.amount = "Amount must be at least 0.00001";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [tx_id, sellerAddress, amount]);
