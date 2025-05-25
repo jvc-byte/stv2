@@ -1,7 +1,7 @@
 'use client';
 import { ConnectButton, lightTheme } from "thirdweb/react";
 import { client } from "@/lib/client";
-import { createWallet, inAppWallet } from "thirdweb/wallets";
+import { /*createWallet*/ inAppWallet } from "thirdweb/wallets";
 import { NextPage } from "next";
 import { defineChain } from "thirdweb";
 import { generatePayload, isLoggedIn, login, logout } from "../api/auth/auth";
@@ -16,9 +16,9 @@ const SignInButton: NextPage = () => {
             },
             hidePrivateKeyExport: true,
         }),
-        createWallet("io.metamask"),
-        createWallet("com.coinbase.wallet"),
-        createWallet("me.rainbow"),
+        // createWallet("io.metamask"),
+        // createWallet("com.coinbase.wallet"),
+        // createWallet("me.rainbow"),
     ];
 
     const chainID = 8453;
