@@ -61,7 +61,7 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
 
         alert(`Deposit successful!\nTransaction Hash: ${transactionHash}`);
         // Update transaction status in the database before redirecting
-        await fetch(`/api/dashboard/transaction-details/update-status`, {
+        await fetch(`${window.location.origin}/api/dashboard/transaction-details/update-status`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -71,7 +71,7 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
           })
         });
         // Get transaction details including seller email
-        const transactionDetailsResponse = await fetch(`/api/dashboard/transaction-details?tx_id=${depositTxId}`);
+        const transactionDetailsResponse = await fetch(`${window.location.origin}/api/dashboard/transaction-details?tx_id=${depositTxId}`);
         const transactionDetails = await transactionDetailsResponse.json();
 
         // Send email notification to seller
