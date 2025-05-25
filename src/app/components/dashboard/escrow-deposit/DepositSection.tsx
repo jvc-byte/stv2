@@ -70,13 +70,18 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
             message: "Money deposited to multisig wallet"
           })
         });
-        // Send email to seller to deliver the product (status-based, no type)
+        // Get transaction details including seller email
+        const transactionDetailsResponse = await fetch(`/api/dashboard/transaction-details?tx_id=${depositTxId}`);
+        const transactionDetails = await transactionDetailsResponse.json();
+
+        // Send email notification to seller
         await fetch("/api/email/send-notification", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             tx_id: depositTxId,
-            status: "5"
+            status: "5",
+            seller_email: transactionDetails.sellerEmail
           })
         });
         alert(`Deposit successful!\nTransaction Hash: ${transactionHash}`);
