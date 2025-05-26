@@ -61,27 +61,13 @@ function DepositSection({ tx_id, amount }: { tx_id: string; amount: string }) {
 
         alert(`Deposit successful!\nTransaction Hash: ${transactionHash}`);
         // Update transaction status in the database before redirecting
-        await fetch(`${window.location.origin}/api/dashboard/transaction-details/update-status`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            tx_id: depositTxId,
-            status: "4",
-            message: "Money deposited to multisig wallet"
-          })
-        });
-        // Get transaction details including seller email
-        const transactionDetailsResponse = await fetch(`${window.location.origin}/api/dashboard/transaction-details?tx_id=${depositTxId}`);
-        const transactionDetails = await transactionDetailsResponse.json();
-
-        // Send email notification to seller
-        await fetch("/api/email/send-notification", {
+        await fetch(`/api/dashboard/transaction-details/update-status`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             tx_id: depositTxId,
             status: "5",
-            seller_email: transactionDetails.sellerEmail
+            message: "Money deposited to multisig wallet"
           })
         });
         alert(`Deposit successful!\nTransaction Hash: ${transactionHash}`);

@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         }
 
         // Send notification if status is one of the ones we care about
-        if (['2', '11', '16'].includes(status)) {
+        if (['2', '5', '11', '16'].includes(status)) {
             // Get the current host from the request URL
             const url = new URL(request.url);
             const baseUrl = new URL('/api/email/send-notification', url);
